@@ -15,7 +15,7 @@ final String PRESET_FILE = "presets.txt";
 //final String RF_SERIAL_PORT = "/dev/tty.usbmodem1411";
 final String RF_SERIAL_PORT = "/dev/tty.sddd";
 //final String SERIAL_PORT = "/dev/tty.usbserial-A703X5EU";
-final String SERIAL_PORT = "/dev/tty.usbmodem1411";
+final String SERIAL_PORT = "/dev/cu.usbserial-A703X5EU";
 
 final int INITIAL_PATTERN = 80;
 
