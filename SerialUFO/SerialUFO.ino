@@ -167,8 +167,6 @@ void read() {
     inputString += c;
     if (c == -128) {
 
-
-      
       if (inputString.charAt(0) == -127) {
 
         // Heartbeat.
@@ -180,14 +178,9 @@ void read() {
           c[i] = sub.charAt(i);
         }
 
-
       } else { 
 
         unsigned char addr = (unsigned char)inputString.charAt(0);
-
-        // Serial.println("PATTERN");
-        // Serial.println(addr);
-
 
         // Pattern.
         if (addr == MYADDR || addr == MYSETADDR || addr == GLOBALADDR) {
@@ -324,7 +317,7 @@ byte currentCommandBuf [READBUFFERSIZE];
 void setup() {
 
   pinMode(13, OUTPUT);
-  Serial.begin(115200);
+  //Serial.begin(115200);
   LEDINPUTSERIAL.begin(9600);
 
   LEDS.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS_PER_STRIP).setCorrection( 0x9FFAF0 );;
