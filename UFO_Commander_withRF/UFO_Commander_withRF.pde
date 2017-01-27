@@ -17,7 +17,7 @@ final String RF_SERIAL_PORT = "/dev/tty.sddd";
 //final String SERIAL_PORT = "/dev/tty.usbserial-A703X5EU";
 final String SERIAL_PORT = "/dev/cu.usbserial-A703X5EU";
 
-final int INITIAL_PATTERN = 80;
+final int INITIAL_PATTERN = 17;
 
 String IPAD_ADDRESS = "10.0.1.2";
 
@@ -29,7 +29,7 @@ int MY_PORT = 12001;
 final int BAUD_RATE = 9600;
 final int MESSAGE_SIZE = 14;
 final int TIMING_ADDR = 129;
-final int OFF_PATTERN = 68;
+final int OFF_PATTERN = 0;
 final int DELIMETER = 128;
 final int INTERVAL = 20;
 
@@ -97,24 +97,24 @@ void setup() {
 
   size(830, 700);
 
-  patterns[80] = "pulseOnce";
-  patterns[79] = "colorWipeMeterGradient";
-  patterns[78] = "colorWipeMeter";
-  patterns[77] = "colorChase";
-  patterns[76] = "stripe";
-  patterns[75] = "colorAlternator";
-  patterns[74] = "colorWipe";
-  patterns[73] = "bounce";
-  patterns[72] = "pulseSaw";
-  patterns[71] = "pulseSine";
-  patterns[70] = "gradient";
-  patterns[69] = "solidColor";
+  patterns[17] = "pulseOnce";
+  patterns[16] = "colorWipeMeterGradient";
+  patterns[15] = "colorWipeMeter";
+  patterns[14] = "colorChase";
+  patterns[13] = "stripe";
+  patterns[12] = "colorAlternator";
+  patterns[11] = "colorWipe";
+  patterns[10] = "bounce";
+  patterns[9] = "pulseSaw";
+  patterns[8] = "pulseSine";
+  patterns[7] = "gradient";
+  patterns[6] = "solidColor";
   patterns[OFF_PATTERN] = "off";
-  patterns[66] = "rainbow";
-  patterns[65] = "rainbowCycle";
-  patterns[64] = "totesRandom";
-  patterns[63] = "flickerStrobeFour";
-  patterns[62] = "flickerStrobeTwo";
+  patterns[5] = "rainbow";
+  patterns[4] = "rainbowCycle";
+  patterns[3] = "totesRandom";
+  patterns[2] = "flickerStrobeFour";
+  patterns[1] = "flickerStrobeTwo";
 
   mappings[1] = "forward";
   mappings[2] = "backward";
