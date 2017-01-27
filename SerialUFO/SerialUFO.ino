@@ -1,8 +1,3 @@
-#define USE_OCTOWS2811
-
-#define USE_VDMX
-
-#include<OctoWS2811.h>
 #include<FastLED.h>
 #include "CommonVariables.h"
 #include "mappings.h"
@@ -116,20 +111,6 @@ void ledCheck(){
 
 }
 
-byte DecodeVDMXPattern(int value)
-{
-  int numIncrement = 127/numPatterns;
-
-  for(int i = 0; i < numPatterns; i++)
-  {
-    if(i*numIncrement <= value && (i+1)*numIncrement > value)
-    {
-      return i;
-    }
-  }
-  return 0;
-}
-
 void SetNewMapping(int value)
 {
   if(value == 0)
@@ -175,11 +156,13 @@ String inputString;
 #define MYSETADDR 1
 #define GLOBALADDR 0
 
+#define LEDINPUTSERIAL Serial1
+
 void read() {
   
-  while (Serial1.available()) {
+  while (LEDINPUTSERIAL.available()) {
 
-    char c = (char)Serial1.read();
+    char c = (char)LEDINPUTSERIAL.read();
     // Serial.println(c, DEC);
     inputString += c;
     if (c == -128) {
@@ -196,10 +179,6 @@ void read() {
         for (int i = 0; i < sub.length(); i++) {
           c[i] = sub.charAt(i);
         }
-        currentTime = atol(c);
-
-        // Serial.print("Current time: ");
-        // Serial.println(currentTime);
 
 
       } else { 
@@ -226,26 +205,13 @@ void read() {
           g3 = (unsigned char)inputString.charAt(10);
           b3 = (unsigned char)inputString.charAt(11);
 
-          brightness = ((unsigned char)inputString.charAt(12))/127.0;
+          mIndBrightness = ((unsigned char)inputString.charAt(12))/127.0;
 
           setColors();
 
-          if (patternByte == 1) {
-            mapping = &forward;
-          } 
-          else if (patternByte == 2) {
-            mapping = &backward;
-          } 
-          else if (patternByte == 3) {
-            mapping = &peak;
-          } 
-          else if (patternByte == 4) {
-            mapping = &valley;
-          } 
-          else if (patternByte == 5) {
-            mapping = &dither;
-          } 
-          else if (patternByte == OFF_PATTERN) {
+          SetNewMapping(patternByte);
+          
+          if (patternByte == OFF_PATTERN) {
             hideAll();
             showAll();
             isOff = true;
@@ -254,6 +220,11 @@ void read() {
             isOff = false;
             pattern = patterns[patternByte];
             pattern(-2, 0); // On select initialization
+            if(patternByte != lastPattern)
+            {
+              lastPattern = patternByte;
+              frame = 1000000;
+            }
           }
 
         }
@@ -269,92 +240,94 @@ void read() {
 }
 
 
-enum controlEnum{setBrightness = 0, setRed1 = 1, setGreen1 = 2, setBlue1 = 3, setPattern = 4, 
-                 setRate = 5, setMapping = 6, setRed2 = 7, setGreen2 = 8, setBlue2 = 9};
-void OnControlChange(byte channel, byte control, byte value) {
-  
-  boolean colorChanged = false;
+//enum controlEnum{setBrightness = 0, setRed1 = 1, setGreen1 = 2, setBlue1 = 3, setPattern = 4, 
+//                 setRate = 5, setMapping = 6, setRed2 = 7, setGreen2 = 8, setBlue2 = 9};
+//void OnControlChange(byte channel, byte control, byte value) {
+//  
+//  boolean colorChanged = false;
+//
+//  if(control == setBrightness)
+//  {
+//    mIndBrightness = ((float)value) / 127.0;
+//  }
+//  else if(control == setRed1)
+//  {
+//    r1 = map(value, 0, 127, 0, 255);
+//    colorChanged = true;
+//  }
+//  else if(control == setGreen1)
+//  {
+//    g1 = map(value, 0, 127, 0, 255);
+//    colorChanged = true;
+//  }
+//  else if(control == setBlue1)
+//  {
+//    b1 = map(value, 0, 127, 0 ,255);
+//    colorChanged = true;
+//  }
+//  else if(control == setPattern)
+//  {
+//
+//    #ifdef USE_VDMX
+//      patternByte = mPattern_to_patternByte(DecodeVDMXPattern(value));
+//    #else
+//      patternByte = mPattern_to_patternByte(value);
+//    #endif
+//
+//    if (patternByte != NULL_PATTERN && patterns[patternByte] != NULL) {
+//      isOff = false;
+//      pattern = patterns[patternByte];
+//      pattern(-2, 0); // On select initialization
+//    }
+//    // Reset frame if pattern change
+//    if(patternByte != lastPattern)
+//    {
+//      lastPattern = patternByte;
+//      frame = 1000000;
+//    }
+//
+//  }
+//  else if(control == setRate)
+// {
+//   rate = map(value, 0, 127, 0, 255);
+// }
+// else if(control == setMapping)
+// {
+//   SetNewMapping(value);
+// }
+// else if(control == setRed2)
+// {
+//   r2 = map(value, 0, 127, 0, 255);
+//   colorChanged = true;
+// }
+// else if(control == setGreen2)
+// {
+//   g2 = map(value, 0, 127, 0, 255);
+//   colorChanged = true;
+// }
+// else if(control == setBlue2)
+// {
+//   b2 = map(value, 0, 127, 0, 255);
+//   colorChanged = true;
+// }
 
-  if(control == setBrightness)
-  {
-    mIndBrightness = ((float)value) / 127.0;
-  }
-  else if(control == setRed1)
-  {
-    r1 = map(value, 0, 127, 0, 255);
-    colorChanged = true;
-  }
-  else if(control == setGreen1)
-  {
-    g1 = map(value, 0, 127, 0, 255);
-    colorChanged = true;
-  }
-  else if(control == setBlue1)
-  {
-    b1 = map(value, 0, 127, 0 ,255);
-    colorChanged = true;
-  }
-  else if(control == setPattern)
-  {
+// if(colorChanged)
+// {
+//   setColors();
+// }
 
-    #ifdef USE_VDMX
-      patternByte = mPattern_to_patternByte(DecodeVDMXPattern(value));
-    #else
-      patternByte = mPattern_to_patternByte(value);
-    #endif
-
-    if (patternByte != NULL_PATTERN && patterns[patternByte] != NULL) {
-      isOff = false;
-      pattern = patterns[patternByte];
-      pattern(-2, 0); // On select initialization
-    }
-    // Reset frame if pattern change
-    if(patternByte != lastPattern)
-    {
-      lastPattern = patternByte;
-      frame = 1000000;
-    }
-
-  }
-  else if(control == setRate)
-  {
-    rate = map(value, 0, 127, 0, 255);
-  }
-  else if(control == setMapping)
-  {
-    SetNewMapping(value);
-  }
-  else if(control == setRed2)
-  {
-    r2 = map(value, 0, 127, 0, 255);
-    colorChanged = true;
-  }
-  else if(control == setGreen2)
-  {
-    g2 = map(value, 0, 127, 0, 255);
-    colorChanged = true;
-  }
-  else if(control == setBlue2)
-  {
-    b2 = map(value, 0, 127, 0, 255);
-    colorChanged = true;
-  }
-
-  if(colorChanged)
-  {
-    setColors();
-  }
-
-}
+//
 
 byte currentCommandBuf [READBUFFERSIZE];
+#define DATA_PIN 6
 
 void setup() {
 
   pinMode(13, OUTPUT);
   Serial.begin(115200);
+  LEDINPUTSERIAL.begin(9600);
 
-  LEDS.addLeds<OCTOWS2811>(leds, NUM_LEDS_PER_STRIP).setCorrection( 0x9FFAF0 );;
+  LEDS.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS_PER_STRIP).setCorrection( 0x9FFAF0 );;
   LEDS.setBrightness(255);
 
   ledCheck();
