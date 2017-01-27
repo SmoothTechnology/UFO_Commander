@@ -165,7 +165,10 @@ void read() {
     char c = (char)LEDINPUTSERIAL.read();
     // Serial.println(c, DEC);
     inputString += c;
-    if (c == -128) {
+
+    if (c == 128) {
+
+      Serial.println(inputString);
 
       if (inputString.charAt(0) == -127) {
 
