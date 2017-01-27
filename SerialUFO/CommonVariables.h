@@ -28,8 +28,8 @@ int  mCurrentFrameCount = 0;
 byte lastPattern = 0;
 
 #define NUM_STEPS_PER_FRAME 20
-#define NULL_PATTERN 0
-#define OFF_PATTERN 68
+#define NULL_PATTERN 19
+#define OFF_PATTERN 0
 #define PAUSE_PATTERN 67
 #define ADV_PATTERN 101
 #define RESET_FRAME 100
