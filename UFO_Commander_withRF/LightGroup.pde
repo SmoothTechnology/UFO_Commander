@@ -141,6 +141,10 @@ class LightGroup {
   }
 
   public void setPattern(int value) {
+    print("Address: ");
+    print(address);
+    print("   Pattern: ");
+    println(value);
     patternList.activate(patterns[value] + address); // h8 u cp5
   }
 

@@ -129,7 +129,7 @@ void read() {
         if (addr == MYADDR || addr == MYSETADDR || addr == GLOBALADDR) {
           
           rate = (unsigned char)inputString.charAt(1) + 1;
-          patternByte = 5;//(unsigned char)inputString.charAt(2);
+          patternByte = (unsigned char)inputString.charAt(2);
 
           r1 = (unsigned char)inputString.charAt(3);
           g1 = (unsigned char)inputString.charAt(4);
@@ -275,25 +275,25 @@ void setup() {
   hideAll();
   showAll();
 
-  patterns[0] = &flickerStrobeTwo;
-  patterns[1] = &flickerStrobeFour;
-  patterns[2] = &totesRandom;
-  patterns[3] = &rainbowCycle;
-  patterns[4] = &rainbow;
+  patterns[1] = &flickerStrobeTwo;
+  patterns[2] = &flickerStrobeFour;
+  patterns[3] = &totesRandom;
+  patterns[4] = &rainbowCycle;
+  patterns[5] = &rainbow;
   // 67 = pause
   // 68 = off
-  patterns[5] = &solidColor;
-  patterns[6] = &gradient;
-  patterns[7] = &pulseSine;
-  patterns[8] = &pulseSaw;
-  patterns[9] = &bounce;
-  patterns[10] = &colorWipe;
-  patterns[11] = &colorAlternator;
-  patterns[12] = &stripe;
-  patterns[13] = &colorChase;
-  patterns[14] = &colorWipeMeter;
-  patterns[15] = &colorWipeMeterGradient;
-  patterns[16] = &pulseOnce;
+  patterns[6] = &solidColor;
+  patterns[7] = &gradient;
+  patterns[8] = &pulseSine;
+  patterns[9] = &pulseSaw;
+  patterns[10] = &bounce;
+  patterns[11] = &colorWipe;
+  patterns[12] = &colorAlternator;
+  patterns[13] = &stripe;
+  patterns[14] = &colorChase;
+  patterns[15] = &colorWipeMeter;
+  patterns[16] = &colorWipeMeterGradient;
+  patterns[17] = &pulseOnce;
 
   rate = 122;
   // pattern = &pulseOnce;
