@@ -170,14 +170,14 @@ class LightGroup {
 
     // Unfortunately, mappings go in the pattern slot
     // We must send two "messages"
-    sendPatternMessage(pattern);
-    sendPatternMessage(mapping);
+    sendPatternMessage(pattern, mapping);
+    //sendPatternMessage(mapping);
 
   }
 
-  private void sendPatternMessage(int pattern) {
+  private void sendPatternMessage(int pattern, int mapping) {
 
-    byte[] serialData = new byte[14];
+    byte[] serialData = new byte[15];
     color color1 = colorPicker1.getColorValue();
     color color2 = colorPicker2.getColorValue();
     float a;
@@ -202,7 +202,8 @@ class LightGroup {
     serialData[11] = 0;
 
     serialData[12] = (byte)brightness;
-    serialData[13] = (byte)DELIMETER;
+    serialData[13] = (byte)mapping;
+    serialData[14] = (byte)DELIMETER;
 
     for (int i = 0; i < serialData.length; i++) {
       messageQueue.offer(serialData[i]);

@@ -203,6 +203,8 @@ void read() {
 
           mIndBrightness = ((unsigned char)inputString.charAt(12))/127.0;
 
+          mappingByte = (unsigned char)inputString.charAt(13);
+
           setColors();
 
           SetNewMapping(patternByte);

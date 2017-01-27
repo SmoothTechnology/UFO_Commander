@@ -41,6 +41,7 @@ byte lastPattern = 0;
 
 unsigned int rate;
 unsigned int patternByte = NULL_PATTERN;
+unsigned int mappingByte = 0;
 
 uint8_t r1 = 0, g1 = 0, b1 = 0,
         r2 = 0, g2 = 0, b2 = 0;
