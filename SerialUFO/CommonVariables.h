@@ -4,11 +4,9 @@ boolean light = false;
 // Uncomment this line if you want to debug
 //#define RUN_DEBUG 1
 unsigned long debugTimer = 0;
-#define NUM_STRIPS 8
-#define NUM_LEDS_PER_STRIP 464
-#define TRUE_NUM_LEDS_PER_STRIP 232
+#define NUM_LEDS 40
 
-const int totalLEDs = NUM_LEDS_PER_STRIP * NUM_STRIPS;
+const int totalLEDs = NUM_LEDS;
 
 CRGB leds[totalLEDs];
 

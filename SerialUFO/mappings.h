@@ -12,17 +12,17 @@ int backward(long frame, int i) {
 
 int intoSpace(long frame, int i)
 {
-  int returnValue = i / NUM_LEDS_PER_STRIP;
+  // int returnValue = i / NUM_L;
 
-  // Case for strips 7-8
-  if(returnValue == 7 || returnValue == 9)
-  {
-    if(i > (NUM_LEDS_PER_STRIP*returnValue) + (NUM_LEDS_PER_STRIP/2) )
-      returnValue++;
-  }
+  // // Case for strips 7-8
+  // if(returnValue == 7 || returnValue == 9)
+  // {
+  //   if(i > (NUM_LEDS_PER_STRIP*returnValue) + (NUM_LEDS_PER_STRIP/2) )
+  //     returnValue++;
+  // }
 
   // Case for strips 1-6
-  return returnValue;
+  return i;
 }
 
 int longSnake(long frame, int i)

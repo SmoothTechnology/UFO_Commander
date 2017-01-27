@@ -320,7 +320,7 @@ void setup() {
   //Serial.begin(115200);
   LEDINPUTSERIAL.begin(9600);
 
-  LEDS.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS_PER_STRIP).setCorrection( 0x9FFAF0 );;
+  LEDS.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS).setCorrection( 0x9FFAF0 );;
   LEDS.setBrightness(255);
 
   ledCheck();
