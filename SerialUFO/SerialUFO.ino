@@ -8,73 +8,6 @@
 
 //Input a rateue 0 to 384 to get a color rateue.
 //The colours are a transition r - g -b - back to r
-
-int numPatterns = 17;
-unsigned int mPattern_to_patternByte(byte incomingByte)
-{
-  switch (incomingByte) {
-    case 0:
-      return 68;
-      break;
-    case 1:
-      return 69;
-      break;
-    case 2:
-      return 70;
-      break;
-    case 3:
-      return 62;
-      break;
-    case 4:
-      return 63;
-      break;
-    case 5:
-      return 64;
-      break;
-    case 6:
-      return 65;
-      break;
-    case 7:
-      return 66;
-      break;
-    case 8:
-      return 71;
-      break;
-    case 9:
-      return 72;
-      break;
-    case 10:
-      return 73;
-      break;
-    case 11:
-      return 74;
-      break;
-    case 12:
-      return 75;
-      break;
-    case 13:
-      return 76;
-      break;
-    case 14:
-      return 77;
-      break;
-    case 15:
-      return 78;
-      break;
-    case 16:
-      return 79;
-      break;
-    case 17:
-      return 80;
-      break;
-    default:
-      return 0;
-      break;
-  }
-
-
-}
-
 void setColors()
 {
   color1 = myColor(r1, g1, b1);
@@ -160,12 +93,19 @@ String inputString;
 
 void read() {
   
+  if(Serial.available())
+  {
+    while(Serial.available())
+      Serial.read();
+    r1 = 255;setColors();
+    Serial.println("SET");
+  }
+
   while (LEDINPUTSERIAL.available()) {
 
     char c = (char)LEDINPUTSERIAL.read();
     // Serial.println(c, DEC);
     inputString += c;
-
     if (c == 128) {
 
       Serial.println(inputString);
@@ -189,7 +129,7 @@ void read() {
         if (addr == MYADDR || addr == MYSETADDR || addr == GLOBALADDR) {
           
           rate = (unsigned char)inputString.charAt(1) + 1;
-          patternByte = (unsigned char)inputString.charAt(2);
+          patternByte = 5;//(unsigned char)inputString.charAt(2);
 
           r1 = (unsigned char)inputString.charAt(3);
           g1 = (unsigned char)inputString.charAt(4);
@@ -207,7 +147,7 @@ void read() {
 
           setColors();
 
-          SetNewMapping(patternByte);
+          SetNewMapping(mappingByte);
           
           if (patternByte == OFF_PATTERN) {
             hideAll();
@@ -335,25 +275,25 @@ void setup() {
   hideAll();
   showAll();
 
-  patterns[62] = &flickerStrobeTwo;
-  patterns[63] = &flickerStrobeFour;
-  patterns[64] = &totesRandom;
-  patterns[65] = &rainbowCycle;
-  patterns[66] = &rainbow;
+  patterns[0] = &flickerStrobeTwo;
+  patterns[1] = &flickerStrobeFour;
+  patterns[2] = &totesRandom;
+  patterns[3] = &rainbowCycle;
+  patterns[4] = &rainbow;
   // 67 = pause
   // 68 = off
-  patterns[69] = &solidColor;
-  patterns[70] = &gradient;
-  patterns[71] = &pulseSine;
-  patterns[72] = &pulseSaw;
-  patterns[73] = &bounce;
-  patterns[74] = &colorWipe;
-  patterns[75] = &colorAlternator;
-  patterns[76] = &stripe;
-  patterns[77] = &colorChase;
-  patterns[78] = &colorWipeMeter;
-  patterns[79] = &colorWipeMeterGradient;
-  patterns[80] = &pulseOnce;
+  patterns[5] = &solidColor;
+  patterns[6] = &gradient;
+  patterns[7] = &pulseSine;
+  patterns[8] = &pulseSaw;
+  patterns[9] = &bounce;
+  patterns[10] = &colorWipe;
+  patterns[11] = &colorAlternator;
+  patterns[12] = &stripe;
+  patterns[13] = &colorChase;
+  patterns[14] = &colorWipeMeter;
+  patterns[15] = &colorWipeMeterGradient;
+  patterns[16] = &pulseOnce;
 
   rate = 122;
   // pattern = &pulseOnce;

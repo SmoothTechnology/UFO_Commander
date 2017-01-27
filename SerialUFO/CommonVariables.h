@@ -60,7 +60,7 @@ long lastFrame = -1;
 
 typedef uint32_t (*Pattern)(long, int);
 
-Pattern patterns[128];
+Pattern patterns[17];
 Pattern pattern;
 
 typedef int (*Mapping)(long, int);
