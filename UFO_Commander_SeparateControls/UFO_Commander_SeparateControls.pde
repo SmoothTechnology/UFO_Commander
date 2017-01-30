@@ -124,24 +124,54 @@ void CheckBangs(ControlEvent theEvent)
 { 
   if(theEvent.isFrom(PulseToBeatBang))
   {
-     useBPM = !useBPM;
-     pulseRight = false;
-     pulseLeft = false;
+     if( (useBPM && pulseLeft) || (useBPM && pulseRight))
+     {
+       useBPM = true;
+       pulseRight = false;
+       pulseLeft = false;  
+     }
+     else if(useBPM)
+     {
+        useBPM = false; 
+     }
+     else
+     {
+        useBPM = true; 
+     }
+     
   }
   else if(theEvent.isFrom(MoveAcrossLeftBang))
   {
     println("Move Left");
-    useBPM = !useBPM;
-    pulseLeft = true;
-    pulseRight = false;
+    if(pulseLeft)
+    {
+       useBPM = false;
+       pulseLeft = false;
+       pulseRight = false; 
+    }
+    else
+    {
+       useBPM = true;
+       pulseLeft = true;
+       pulseRight = false; 
+    }
     curBoxPulse = numberBoxes-1;
   }
   else if(theEvent.isFrom(MoveAcrossRightBang))
   {
     println("Move Right");
-    useBPM = !useBPM;
-    pulseRight = true;
-    pulseLeft = false;
+    if(pulseRight)
+    {
+       useBPM = false;
+       pulseLeft = false;
+       pulseRight = false; 
+    }
+    else
+    {
+       useBPM = true;
+       pulseLeft = false;
+       pulseRight = true; 
+    }
     curBoxPulse = 0;
   }
   
