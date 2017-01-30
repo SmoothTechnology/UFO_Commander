@@ -10,49 +10,6 @@ import java.util.regex.Pattern;
 final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
-// Special Push Buttons
-public Bang PulseToBeatBang;
-public Bang MoveAcrossLeftBang;
-public Bang MoveAcrossRightBang;
-
-void AddBangsToGUI()
-{
-  PulseToBeatBang = controlP5.addBang("doPulseToBeat")
-             .setPosition(20, 700)
-             .setSize(60, 20)
-             .setTriggerEvent(Bang.RELEASE)
-             .setLabel("Pulse To Beat");
-            
-  MoveAcrossLeftBang = controlP5.addBang("MoveAcrossLeft")
-             .setPosition(100, 700)
-             .setSize(60, 20)
-             .setTriggerEvent(Bang.RELEASE)
-             .setLabel("Move Left");
-             
-  MoveAcrossRightBang = controlP5.addBang("MoveAcrossRight")
-             .setPosition(180, 700)
-             .setSize(60, 20)
-             .setTriggerEvent(Bang.RELEASE)
-             .setLabel("Move Right");
-}
-
-void CheckBangs(ControlEvent theEvent) 
-{ 
-  if(theEvent.isFrom(PulseToBeatBang))
-  {
-     println("Pulse To Beat"); 
-  }
-  else if(theEvent.isFrom(MoveAcrossLeftBang))
-  {
-    println("Move Left");
-  }
-  else if(theEvent.isFrom(MoveAcrossRightBang))
-  {
-    println("Move Right");
-  }
-  
-}
-
 // BPM Control
 boolean useBPM = false;
 boolean lastUseBPM = false;
@@ -84,8 +41,10 @@ void TriggerOnBeat()
      if(curMillis - lastBPMTime > curBPMInterval)
      {
         lastBPMTime = curMillis - (curMillis - lastBPMTime - curBPMInterval);
-        println(lastBPMTime);
-        applyPreset(curPreset);
+        //applyPreset(curPreset);
+        
+        // PRESET 34 IS MY PULSE
+        applyPreset(34);
      } 
   }
   
@@ -101,6 +60,52 @@ void AddBPMControl()
              .setRange(0, 300)
              .setSize(220, 20)
              .setLabel("BPM");
+}
+
+// Special Push Buttons
+public Bang PulseToBeatBang;
+public Bang MoveAcrossLeftBang;
+public Bang MoveAcrossRightBang;
+
+boolean PulseRight = false;
+boolean PulseLeft = false;
+
+void AddBangsToGUI()
+{
+  PulseToBeatBang = controlP5.addBang("doPulseToBeat")
+             .setPosition(20, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Pulse To Beat");
+            
+  MoveAcrossLeftBang = controlP5.addBang("MoveAcrossLeft")
+             .setPosition(100, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Left");
+             
+  MoveAcrossRightBang = controlP5.addBang("MoveAcrossRight")
+             .setPosition(180, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Right");
+}
+
+void CheckBangs(ControlEvent theEvent) 
+{ 
+  if(theEvent.isFrom(PulseToBeatBang))
+  {
+     useBPM = !useBPM;
+  }
+  else if(theEvent.isFrom(MoveAcrossLeftBang))
+  {
+    println("Move Left");
+  }
+  else if(theEvent.isFrom(MoveAcrossRightBang))
+  {
+    println("Move Right");
+  }
+  
 }
 
 final String PRESET_FILE = "presets.txt";
