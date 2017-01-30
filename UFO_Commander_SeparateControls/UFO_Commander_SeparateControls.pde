@@ -31,6 +31,11 @@ void TriggerOnBeat()
    } 
 }
 
+void AddBPMControl()
+{
+ controlP5.addToggle("useBPM").setPosition(120, 700);
+}
+
 final String PRESET_FILE = "presets.txt";
 
 //final String RF_SERIAL_PORT = "/dev/tty.usbmodem1411";
@@ -118,7 +123,7 @@ void setup() {
 
 
 
-  size(1350, 700);
+  size(1350, 800);
 
   patterns[17] = "pulseOnce";
   patterns[16] = "colorWipeMeterGradient";
@@ -213,6 +218,7 @@ void setup() {
   synchronizePatterns();
   synchronizeMappings();
 
+  AddBPMControl();
   CalculateInterval();
 
 }
