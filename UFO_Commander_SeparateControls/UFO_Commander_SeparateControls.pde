@@ -15,6 +15,7 @@ int curBPM = 100;
 int curBPMInterval = 0;
 int lastBPMTime = 0;
 int curPreset = 0;
+public Slider bpmSlider;
 
 void CalculateInterval()
 {
@@ -24,6 +25,7 @@ void CalculateInterval()
 
 void TriggerOnBeat()
 {
+   CalculateInterval();
    if(millis() - lastBPMTime > curBPMInterval)
    {
       lastBPMTime = millis();
@@ -34,6 +36,14 @@ void TriggerOnBeat()
 void AddBPMControl()
 {
  controlP5.addToggle("useBPM").setPosition(120, 700);
+ 
+ bpmSlider = controlP5.addSlider("curBPM")
+             .setPosition(120, 750)
+             .setRange(0, 300)
+             .setSize(220, 20)
+             //.setDecimalPrecision(0)
+             .setLabel("BPM");
+            // .setValue(curBPM);
 }
 
 final String PRESET_FILE = "presets.txt";
