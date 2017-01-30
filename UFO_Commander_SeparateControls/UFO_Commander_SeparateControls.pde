@@ -10,6 +10,50 @@ import java.util.regex.Pattern;
 final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
+// Special Push Buttons
+public Bang PulseToBeatBang;
+public Bang MoveAcrossLeftBang;
+public Bang MoveAcrossRightBang;
+
+void AddBangsToGUI()
+{
+  PulseToBeatBang = controlP5.addBang("doPulseToBeat")
+             .setPosition(20, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Pulse To Beat");
+            
+  MoveAcrossLeftBang = controlP5.addBang("MoveAcrossLeft")
+             .setPosition(100, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Left");
+             
+  MoveAcrossRightBang = controlP5.addBang("MoveAcrossRight")
+             .setPosition(180, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Right");
+}
+
+void CheckBangs(ControlEvent theEvent) 
+{ 
+  if(theEvent.isFrom(PulseToBeatBang))
+  {
+     println("Pulse To Beat"); 
+  }
+  else if(theEvent.isFrom(MoveAcrossLeftBang))
+  {
+    println("Move Left");
+  }
+  else if(theEvent.isFrom(MoveAcrossRightBang))
+  {
+    println("Move Right");
+  }
+  
+}
+
+// BPM Control
 boolean useBPM = false;
 boolean lastUseBPM = false;
 int curBPM = 100;
@@ -243,7 +287,8 @@ void setup() {
   synchronizePatterns();
   synchronizeMappings();
 
-  AddBPMControl();
+  AddBangsToGUI();
+  //AddBPMControl();
   CalculateInterval();
 
 }
@@ -318,7 +363,9 @@ void keyPressed() {
 }
 
 void controlEvent(ControlEvent theEvent) {
-
+  
+  CheckBangs(theEvent);
+  
   LightGroup l = checkLightControllers(theEvent);
 
   if (keyPressed || l == groupAll) expressSympathy(theEvent);
