@@ -10,6 +10,27 @@ import java.util.regex.Pattern;
 final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
+boolean useBPM = true;
+int curBPM = 100;
+int curBPMInterval = 0;
+int lastBPMTime = 0;
+int curPreset = 0;
+
+void CalculateInterval()
+{
+  double intermediateValue = (60.0/curBPM)*1000;
+  curBPMInterval = (int)intermediateValue;
+}
+
+void TriggerOnBeat()
+{
+   if(millis() - lastBPMTime > curBPMInterval)
+   {
+      lastBPMTime = millis();
+      applyPreset(curPreset);
+   } 
+}
+
 final String PRESET_FILE = "presets.txt";
 
 //final String RF_SERIAL_PORT = "/dev/tty.usbmodem1411";
@@ -192,6 +213,8 @@ void setup() {
   synchronizePatterns();
   synchronizeMappings();
 
+  CalculateInterval();
+
 }
 
 void draw() {
@@ -211,7 +234,11 @@ void draw() {
   // checks for the existence of port itself
   // still debugs if port isn't there
   if (!stealth) emptyMessageQueue();
-
+  
+  if(useBPM)
+  {
+    TriggerOnBeat();
+  }
 }
 
 void sendAllMessages() {
@@ -274,7 +301,8 @@ void controlEvent(ControlEvent theEvent) {
   }
 
   if (theEvent.isFrom(presetList)) {
-    applyPreset((int)theEvent.value());
+    curPreset = (int)theEvent.value();
+    applyPreset(curPreset);
   }
 
 }
