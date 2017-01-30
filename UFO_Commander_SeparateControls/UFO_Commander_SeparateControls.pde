@@ -26,9 +26,11 @@ void CalculateInterval()
 void TriggerOnBeat()
 {
    CalculateInterval();
-   if(millis() - lastBPMTime > curBPMInterval)
+   int curMillis = millis();
+   if(curMillis - lastBPMTime > curBPMInterval)
    {
-      lastBPMTime = millis();
+      lastBPMTime = curMillis - (curMillis - lastBPMTime - curBPMInterval);
+      println(lastBPMTime);
       applyPreset(curPreset);
    } 
 }
@@ -49,7 +51,9 @@ final String PRESET_FILE = "presets.txt";
 //final String RF_SERIAL_PORT = "/dev/tty.usbmodem1411";
 final String RF_SERIAL_PORT = "/dev/tty.sddd";
 //final String SERIAL_PORT = "/dev/tty.usbserial-A703X5EU";
+
 final String SERIAL_PORT = "/dev/cu.usbserial-A703X5EU";
+//final String SERIAL_PORT = "/dev/cu.usbmodem1411";
 
 final int INITIAL_PATTERN = 17;
 
@@ -64,7 +68,7 @@ final int BAUD_RATE = 9600;
 final int MESSAGE_SIZE = 14;
 final int TIMING_ADDR = 129;
 final int OFF_PATTERN = 0;
-final int DELIMETER = 128;
+final int DELIMETER = (int)'z';
 final int INTERVAL = 20;
 
 int lastHeartbeat;
