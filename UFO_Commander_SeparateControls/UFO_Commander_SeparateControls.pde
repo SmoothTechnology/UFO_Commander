@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
-boolean useBPM = true;
+boolean useBPM = false;
 int curBPM = 100;
 int curBPMInterval = 0;
 int lastBPMTime = 0;
