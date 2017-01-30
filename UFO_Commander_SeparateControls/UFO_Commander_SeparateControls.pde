@@ -5,7 +5,7 @@ import processing.serial.*;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.Pattern; 
 
 final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;

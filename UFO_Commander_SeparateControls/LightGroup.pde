@@ -59,7 +59,7 @@ class LightGroup {
 
     rateSlider = controlP5.addSlider("rate-"+address)
              .setPosition(x, y)
-             .setRange(0, 127)
+             .setRange(0, 255)
              .setSize(220, 20)
              .setDecimalPrecision(0)
              .setLabel("rate")
