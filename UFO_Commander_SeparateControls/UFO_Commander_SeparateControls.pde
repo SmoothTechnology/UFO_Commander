@@ -41,9 +41,7 @@ void AddBPMControl()
              .setPosition(120, 750)
              .setRange(0, 300)
              .setSize(220, 20)
-             //.setDecimalPrecision(0)
              .setLabel("BPM");
-            // .setValue(curBPM);
 }
 
 final String PRESET_FILE = "presets.txt";
