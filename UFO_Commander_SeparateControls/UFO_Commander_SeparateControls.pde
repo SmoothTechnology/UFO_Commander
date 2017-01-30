@@ -11,11 +11,13 @@ final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
 boolean useBPM = false;
+boolean lastUseBPM = false;
 int curBPM = 100;
 int curBPMInterval = 0;
 int lastBPMTime = 0;
 int curPreset = 0;
 public Slider bpmSlider;
+
 
 void CalculateInterval()
 {
@@ -25,14 +27,25 @@ void CalculateInterval()
 
 void TriggerOnBeat()
 {
-   CalculateInterval();
-   int curMillis = millis();
-   if(curMillis - lastBPMTime > curBPMInterval)
-   {
-      lastBPMTime = curMillis - (curMillis - lastBPMTime - curBPMInterval);
-      println(lastBPMTime);
-      applyPreset(curPreset);
-   } 
+  if(useBPM)
+  {
+     CalculateInterval();
+     
+     if(lastUseBPM != useBPM)
+     {
+       lastBPMTime = millis() - curBPMInterval-1;  
+     }
+     
+     int curMillis = millis();
+     if(curMillis - lastBPMTime > curBPMInterval)
+     {
+        lastBPMTime = curMillis - (curMillis - lastBPMTime - curBPMInterval);
+        println(lastBPMTime);
+        applyPreset(curPreset);
+     } 
+  }
+  
+  lastUseBPM = useBPM;
 }
 
 void AddBPMControl()
@@ -253,10 +266,7 @@ void draw() {
   // still debugs if port isn't there
   if (!stealth) emptyMessageQueue();
   
-  if(useBPM)
-  {
-    TriggerOnBeat();
-  }
+  TriggerOnBeat();
 }
 
 void sendAllMessages() {
