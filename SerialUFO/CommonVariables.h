@@ -4,7 +4,7 @@ boolean light = false;
 // Uncomment this line if you want to debug
 //#define RUN_DEBUG 1
 unsigned long debugTimer = 0;
-#define NUM_LEDS 40
+#define NUM_LEDS 300
 
 const int totalLEDs = NUM_LEDS;
 

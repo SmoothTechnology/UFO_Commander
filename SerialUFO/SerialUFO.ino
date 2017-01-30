@@ -85,7 +85,7 @@ void SetNewMapping(int value)
 }
 
 String inputString;
-#define MYADDR 2
+#define MYADDR 3
 #define MYSETADDR 6
 #define GLOBALADDR 0
 

@@ -11,6 +11,11 @@ final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
 // BPM Control
+int curBoxPulse = 0;
+int numberBoxes = 4;
+boolean pulseRight = false;
+boolean pulseLeft = false;
+
 boolean useBPM = false;
 boolean lastUseBPM = false;
 int curBPM = 100;
@@ -44,7 +49,32 @@ void TriggerOnBeat()
         //applyPreset(curPreset);
         
         // PRESET 34 IS MY PULSE
-        applyPreset(34);
+        if(pulseRight)
+        {
+          curBoxPulse++;
+          if(curBoxPulse >= numberBoxes)
+          {
+             curBoxPulse = 0; 
+          }
+          
+          // Light Here
+          applyPreset(36 + curBoxPulse); 
+        }
+        else if(pulseLeft)
+        {
+          curBoxPulse--;
+          if(curBoxPulse < 0)
+          {
+            curBoxPulse = numberBoxes-1;
+          }
+          
+          // Light Here
+          applyPreset(36 + curBoxPulse); 
+        }
+        else
+        {
+          applyPreset(34);  
+        }
      } 
   }
   
@@ -53,10 +83,10 @@ void TriggerOnBeat()
 
 void AddBPMControl()
 {
- controlP5.addToggle("useBPM").setPosition(120, 700);
+ //controlP5.addToggle("useBPM").setPosition(120, 700);
  
  bpmSlider = controlP5.addSlider("curBPM")
-             .setPosition(120, 750)
+             .setPosition(260, 700)
              .setRange(0, 300)
              .setSize(220, 20)
              .setLabel("BPM");
@@ -66,9 +96,6 @@ void AddBPMControl()
 public Bang PulseToBeatBang;
 public Bang MoveAcrossLeftBang;
 public Bang MoveAcrossRightBang;
-
-boolean PulseRight = false;
-boolean PulseLeft = false;
 
 void AddBangsToGUI()
 {
@@ -89,6 +116,8 @@ void AddBangsToGUI()
              .setSize(60, 20)
              .setTriggerEvent(Bang.RELEASE)
              .setLabel("Move Right");
+             
+   AddBPMControl();
 }
 
 void CheckBangs(ControlEvent theEvent) 
@@ -96,14 +125,24 @@ void CheckBangs(ControlEvent theEvent)
   if(theEvent.isFrom(PulseToBeatBang))
   {
      useBPM = !useBPM;
+     pulseRight = false;
+     pulseLeft = false;
   }
   else if(theEvent.isFrom(MoveAcrossLeftBang))
   {
     println("Move Left");
+    useBPM = !useBPM;
+    pulseLeft = true;
+    pulseRight = false;
+    curBoxPulse = numberBoxes-1;
   }
   else if(theEvent.isFrom(MoveAcrossRightBang))
   {
     println("Move Right");
+    useBPM = !useBPM;
+    pulseRight = true;
+    pulseLeft = false;
+    curBoxPulse = 0;
   }
   
 }
