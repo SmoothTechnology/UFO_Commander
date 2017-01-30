@@ -85,8 +85,8 @@ void SetNewMapping(int value)
 }
 
 String inputString;
-#define MYADDR 2
-#define MYSETADDR 1
+#define MYADDR 1
+#define MYSETADDR 6
 #define GLOBALADDR 0
 
 #define LEDINPUTSERIAL Serial1
