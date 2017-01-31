@@ -288,6 +288,8 @@ String[] patterns = new String[127];
 String[] mappings = new String[8];
 
 ListBox presetList;
+ListBox presetToPulse;
+ListBox presetToCycle;
 Textfield presetNamer;
 
 Toggle rfPortActiveToggle;
@@ -402,6 +404,20 @@ void setup() {
 
   presetList = controlP5.addListBox("preset-list")
                         .setPosition(PADDING, PADDING*2 + 70)
+                        .setSize(LIGHT_GROUP_WIDTH, 600)
+                        .setItemHeight(20)
+                        .actAsPulldownMenu(false)
+                        .moveTo("presets");
+                     
+   presetToPulse = controlP5.addListBox("preset-to-pulse")
+                        .setPosition(PADDING+400, PADDING*2 + 70)
+                        .setSize(LIGHT_GROUP_WIDTH, 600)
+                        .setItemHeight(20)
+                        .actAsPulldownMenu(false)
+                        .moveTo("presets");
+                        
+  presetToCycle = controlP5.addListBox("preset-to-cycle")
+                        .setPosition(PADDING+800, PADDING*2 + 70)
                         .setSize(LIGHT_GROUP_WIDTH, 600)
                         .setItemHeight(20)
                         .actAsPulldownMenu(false)
@@ -643,6 +659,8 @@ void savePreset(String presetName) {
 
   presets.add(preset);
   presetList.addItem(presetName, presets.size()-1);
+  presetToPulse.addItem(presetName, presets.size()-1);
+  presetToCycle.addItem(presetName, presets.size() - 1);
 
   writePresets();
 
@@ -779,5 +797,6 @@ void parsePreset(String s) {
 
   presets.add(preset);
   presetList.addItem(data[0], presets.size()-1);
-
+  presetToPulse.addItem(data[0], presets.size()-1);
+  presetToCycle.addItem(data[0], presets.size() - 1);
 }
