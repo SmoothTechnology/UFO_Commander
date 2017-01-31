@@ -287,7 +287,7 @@ final int PADDING = 15;
 ControlP5 controlP5;
 
 String[] patterns = new String[127];
-String[] mappings = new String[8];
+String[] mappings = new String[16];
 
 ListBox presetList;
 ListBox presetToPulse;
@@ -347,12 +347,21 @@ void setup() {
   patterns[2] = "flickerStrobeFour";
   patterns[1] = "flickerStrobeTwo";
 
-  mappings[1] = "forward";
-  mappings[2] = "backward";
-  mappings[3] = "peak";
-  mappings[4] = "ShortForward";
-  mappings[5] = "LongForward";
-  mappings[6] = "dekonstruktor";
+  mappings[0] = "snake";
+  mappings[1] = "peak";
+  mappings[2] = "valley";
+  mappings[3] = "dither";
+  mappings[4] = "dekonstruktor";
+  mappings[5] = "horizontal";
+  mappings[6] = "horiz-peak";
+  mappings[7] = "horiz-valley";
+  mappings[8] = "horiz-dither";
+  mappings[9] = "horiz-dekonstruktor";
+  mappings[10] = "vertical";
+  mappings[11] = "vert-peak";
+  mappings[12] = "vert-valley";
+  mappings[13] = "vert-dither";
+  mappings[14] = "vert-dekonstruktor";
 
   controlP5 = new ControlP5(this);
 
