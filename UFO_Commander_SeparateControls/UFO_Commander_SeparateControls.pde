@@ -33,6 +33,10 @@ void CalculateInterval()
 
 void TriggerOnBeat()
 {
+  BPMIndicateTog.setValue(useBPM);
+  PRightIndicateTog.setValue(pulseRight);
+  PLeftIndicateTog.setValue(pulseLeft);
+  
   if(useBPM)
   {
      CalculateInterval();
@@ -77,6 +81,10 @@ void TriggerOnBeat()
         }
      } 
   }
+  else if(lastUseBPM != useBPM)
+  {
+     applyPreset(curPreset); 
+  }
   
   lastUseBPM = useBPM;
 }
@@ -97,6 +105,10 @@ public Bang PulseToBeatBang;
 public Bang MoveAcrossLeftBang;
 public Bang MoveAcrossRightBang;
 
+Toggle BPMIndicateTog;
+Toggle PRightIndicateTog;
+Toggle PLeftIndicateTog;
+
 void AddBangsToGUI()
 {
   PulseToBeatBang = controlP5.addBang("doPulseToBeat")
@@ -116,6 +128,10 @@ void AddBangsToGUI()
              .setSize(60, 20)
              .setTriggerEvent(Bang.RELEASE)
              .setLabel("Move Right");
+             
+   BPMIndicateTog = controlP5.addToggle("useBPM").setPosition(20, 750);
+   PRightIndicateTog = controlP5.addToggle("pulseRight").setPosition(100, 750);
+   PLeftIndicateTog = controlP5.addToggle("pulseLeft").setPosition(180, 750);
              
    AddBPMControl();
 }
@@ -368,6 +384,7 @@ void setup() {
 }
 
 void draw() {
+ 
  if(DEBUG){
   if(frameCount%2 == 0){
   background(0);
@@ -507,7 +524,7 @@ void expressSympathy(ControlEvent theEvent) {
  * Returns Light group controller came from or null if none.
  */
 LightGroup checkLightControllers(ControlEvent theEvent) {
-
+  
   for (Object o : lightGroups) {
 
     LightGroup l = (LightGroup)o;
