@@ -22,6 +22,8 @@ int curBPM = 100;
 int curBPMInterval = 0;
 int lastBPMTime = 0;
 int curPreset = 0;
+int curPulsePreset = 0;
+int curCyclePreset = 0;
 public Slider bpmSlider;
 
 
@@ -65,7 +67,7 @@ void TriggerOnBeat()
           }
           
           // Light Here
-          applyPreset(36 + curBoxPulse); 
+          applyPreset(curCyclePreset + curBoxPulse); 
         }
         else if(pulseLeft)
         {
@@ -76,11 +78,11 @@ void TriggerOnBeat()
           }
           
           // Light Here
-          applyPreset(36 + curBoxPulse); 
+          applyPreset(curCyclePreset + curBoxPulse); 
         }
         else
         {
-          applyPreset(34);  
+          applyPreset(curPulsePreset);  
         }
      } 
   }
@@ -100,7 +102,8 @@ void AddBPMControl()
              .setPosition(260, 700)
              .setRange(0, 300)
              .setSize(220, 20)
-             .setLabel("BPM");
+             .setLabel("BPM")
+             .moveTo("presets");
 }
 
 // Special Push Buttons
@@ -238,7 +241,7 @@ final String PRESET_FILE = "presets.txt";
 final String RF_SERIAL_PORT = "/dev/tty.sddd";
 //final String SERIAL_PORT = "/dev/tty.usbserial-A703X5EU";
 
-final String SERIAL_PORT = "/dev/cu.usbserial-A703X5EU";
+final String SERIAL_PORT = "/dev/tty.usbserial-A100S23I";
 //final String SERIAL_PORT = "/dev/cu.usbmodem1411";
 
 final int INITIAL_PATTERN = 17;
@@ -284,9 +287,11 @@ final int PADDING = 15;
 ControlP5 controlP5;
 
 String[] patterns = new String[127];
-String[] mappings = new String[6];
+String[] mappings = new String[16];
 
 ListBox presetList;
+ListBox presetToPulse;
+ListBox presetToCycle;
 Textfield presetNamer;
 
 Toggle rfPortActiveToggle;
@@ -342,11 +347,21 @@ void setup() {
   patterns[2] = "flickerStrobeFour";
   patterns[1] = "flickerStrobeTwo";
 
-  mappings[1] = "forward";
-  mappings[2] = "backward";
-  mappings[3] = "peak";
-  mappings[4] = "valley";
-  mappings[5] = "dither";
+  mappings[0] = "snake";
+  mappings[1] = "peak";
+  mappings[2] = "valley";
+  mappings[3] = "dither";
+  mappings[4] = "dekonstruktor";
+  mappings[5] = "horizontal";
+  mappings[6] = "horiz-peak";
+  mappings[7] = "horiz-valley";
+  mappings[8] = "horiz-dither";
+  mappings[9] = "horiz-dekonstruktor";
+  mappings[10] = "vertical";
+  mappings[11] = "vert-peak";
+  mappings[12] = "vert-valley";
+  mappings[13] = "vert-dither";
+  mappings[14] = "vert-dekonstruktor";
 
   controlP5 = new ControlP5(this);
 
@@ -400,6 +415,20 @@ void setup() {
 
   presetList = controlP5.addListBox("preset-list")
                         .setPosition(PADDING, PADDING*2 + 70)
+                        .setSize(LIGHT_GROUP_WIDTH, 600)
+                        .setItemHeight(20)
+                        .actAsPulldownMenu(false)
+                        .moveTo("presets");
+                     
+   presetToPulse = controlP5.addListBox("preset-to-pulse")
+                        .setPosition(PADDING+400, PADDING*2 + 70)
+                        .setSize(LIGHT_GROUP_WIDTH, 600)
+                        .setItemHeight(20)
+                        .actAsPulldownMenu(false)
+                        .moveTo("presets");
+                        
+  presetToCycle = controlP5.addListBox("preset-to-cycle")
+                        .setPosition(PADDING+800, PADDING*2 + 70)
                         .setSize(LIGHT_GROUP_WIDTH, 600)
                         .setItemHeight(20)
                         .actAsPulldownMenu(false)
@@ -511,6 +540,15 @@ void controlEvent(ControlEvent theEvent) {
     pulseLeft = false;
     curPreset = (int)theEvent.value();
     applyPreset(curPreset);
+  }
+  
+  if (theEvent.isFrom(presetToPulse)){
+     curPulsePreset = (int)theEvent.value(); 
+  }
+  
+  if(theEvent.isFrom(presetToCycle))
+  {
+     curCyclePreset = (int)theEvent.value(); 
   }
 
 }
@@ -641,6 +679,8 @@ void savePreset(String presetName) {
 
   presets.add(preset);
   presetList.addItem(presetName, presets.size()-1);
+  presetToPulse.addItem(presetName, presets.size()-1);
+  presetToCycle.addItem(presetName, presets.size() - 1);
 
   writePresets();
 
@@ -777,5 +817,6 @@ void parsePreset(String s) {
 
   presets.add(preset);
   presetList.addItem(data[0], presets.size()-1);
-
+  presetToPulse.addItem(data[0], presets.size()-1);
+  presetToCycle.addItem(data[0], presets.size() - 1);
 }
