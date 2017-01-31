@@ -28,15 +28,14 @@ void showAll() {
 void ledCheck(){
   int f = 0;
   int s = 6;
-  while(f < 300){
+  int curColorVal = 255;
+  while(f < 25){
       for(int i = 0; i < totalLEDs; i++){
-        if ((i + f)/s % s < s/2){
-          leds[i] = CRGB(255,255,0);
-        }
-        else
-        leds[i] = CRGB(0,0,255);
+
+        leds[i] = CRGB(curColorVal, curColorVal, curColorVal);
       }
 
+      curColorVal = curColorVal - 10;
       LEDS.show();
       f++;
       delay(20);
