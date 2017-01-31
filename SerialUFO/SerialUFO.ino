@@ -85,7 +85,7 @@ void SetNewMapping(int value)
 }
 
 String inputString;
-#define MYADDR 3
+#define MYADDR 4
 #define MYSETADDR 6
 #define GLOBALADDR 0
 
@@ -360,12 +360,13 @@ void loop() {
     frame = 0;
   }
 
-  if (light)
-    digitalWrite(13, HIGH);
-  else
-    digitalWrite(13, LOW);
+  // Do Not light pin 13
+  //if (light)
+  //  digitalWrite(13, HIGH);
+  //else
+  //  digitalWrite(13, LOW);
 
-  light = !light;
+  //light = !light;
 
 }
 
