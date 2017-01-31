@@ -51,40 +51,69 @@ void SetNewMapping(int value)
   }
   else if(value == 1)
   {
-    mapping = &backward;
+    mapping = &peak;
   }
   else if(value == 2)
   {
-    mapping = &snake;
+    mapping = &valley;
   }
   else if(value == 3)
   {
-    mapping = &intoSpace;
+    mapping = &dither;
   }
   else if(value == 4)
   {
-    mapping = &shortSnake;
+    mapping = &dekonstruktor;
   }
+
+  //Horizontal Mapping
   else if(value == 5)
   {
-    mapping = &longSnake;
+    mapping = &H_forward;
   }
   else if(value == 6)
   {
-    mapping = &dekonstruktor;
+    mapping = &H_peak;
   }
-  else if(value > 7)
+  else if(value == 7)
   {
-    mapping = &deskonstruktorIntoSpace;
+    mapping = &H_valley;
   }
-  //else if(value == 7)
-  //{
-  //  mapping = &dekonstruktorRando;
-  //}
+  else if(value == 8)
+  {
+    mapping = &H_dither;
+  }
+  else if(value == 9)
+  {
+    mapping = &H_dekonstruktor;
+  }
+
+  //Vertical Mapping
+  else if(value == 10)
+  {
+    mapping = &V_forward;
+  }
+  else if(value == 11)
+  {
+    mapping = &V_peak;
+  }
+  else if(value == 12)
+  {
+    mapping = &V_valley;
+  }
+  else if(value == 13)
+  {
+    mapping = &V_dither;
+  }
+  else if(value == 14)
+  {
+    mapping = &V_dekonstruktor;
+  }
+
 }
 
 String inputString;
-#define MYADDR 4
+#define MYADDR 3
 #define MYSETADDR 6
 #define GLOBALADDR 0
 
@@ -254,13 +283,12 @@ byte currentCommandBuf [READBUFFERSIZE];
 #define DATA_PIN 8
 
 void setup() {
-
   pinMode(13, OUTPUT);
   //Serial.begin(115200);
   LEDINPUTSERIAL.begin(9600);
   DEBUG_PORT.begin(9600);
 
-  LEDS.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS).setCorrection( 0x9FFAF0 );;
+  LEDS.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
   LEDS.setBrightness(255);
 
   ledCheck();
@@ -290,10 +318,9 @@ void setup() {
   patterns[16] = &colorWipeMeterGradient;
   patterns[17] = &pulseOnce;
 
-  rate = 122;
   // pattern = &pulseOnce;
-  pattern = &gradient;
-  mapping = &intoSpace;
+  pattern = &pulseOnce;
+  mapping = &forward;
 
   mIndBrightness = 255;
   
