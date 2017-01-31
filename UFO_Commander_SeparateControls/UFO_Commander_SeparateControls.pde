@@ -65,7 +65,7 @@ void TriggerOnBeat()
           }
           
           // Light Here
-          applyPreset(36 + curBoxPulse); 
+          applyPreset(curPreset + curBoxPulse); 
         }
         else if(pulseLeft)
         {
@@ -76,11 +76,11 @@ void TriggerOnBeat()
           }
           
           // Light Here
-          applyPreset(36 + curBoxPulse); 
+          applyPreset(curPreset + curBoxPulse); 
         }
         else
         {
-          applyPreset(34);  
+          applyPreset(curPreset);  
         }
      } 
   }
@@ -100,7 +100,8 @@ void AddBPMControl()
              .setPosition(260, 700)
              .setRange(0, 300)
              .setSize(220, 20)
-             .setLabel("BPM");
+             .setLabel("BPM")
+             .moveTo("presets");
 }
 
 // Special Push Buttons
@@ -238,7 +239,7 @@ final String PRESET_FILE = "presets.txt";
 final String RF_SERIAL_PORT = "/dev/tty.sddd";
 //final String SERIAL_PORT = "/dev/tty.usbserial-A703X5EU";
 
-final String SERIAL_PORT = "/dev/cu.usbserial-A703X5EU";
+final String SERIAL_PORT = "/dev/tty.usbserial-A100S23I";
 //final String SERIAL_PORT = "/dev/cu.usbmodem1411";
 
 final int INITIAL_PATTERN = 17;
