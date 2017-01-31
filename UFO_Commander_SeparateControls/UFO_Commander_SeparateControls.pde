@@ -36,6 +36,9 @@ void TriggerOnBeat()
   BPMIndicateTog.setValue(useBPM);
   PRightIndicateTog.setValue(pulseRight);
   PLeftIndicateTog.setValue(pulseLeft);
+  BPMIndicateTogPresets.setValue(useBPM);
+  PRightIndicateTogPresets.setValue(pulseRight);
+  PLeftIndicateTogPresets.setValue(pulseLeft);
   
   if(useBPM)
   {
@@ -104,10 +107,45 @@ void AddBPMControl()
 public Bang PulseToBeatBang;
 public Bang MoveAcrossLeftBang;
 public Bang MoveAcrossRightBang;
+public Bang PulseToBeatBangPresets;
+public Bang MoveAcrossLeftBangPresets;
+public Bang MoveAcrossRightBangPresets;
 
 Toggle BPMIndicateTog;
 Toggle PRightIndicateTog;
 Toggle PLeftIndicateTog;
+Toggle BPMIndicateTogPresets;
+Toggle PRightIndicateTogPresets;
+Toggle PLeftIndicateTogPresets;
+
+
+void AddBPMBasedControlsToPresetList()
+{                   
+   PulseToBeatBangPresets = controlP5.addBang("Beat Pulse")
+             .setPosition(20, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Pulse To Beat")
+             .moveTo("presets");
+            
+  MoveAcrossLeftBangPresets = controlP5.addBang("Move Left")
+             .setPosition(100, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Left")
+             .moveTo("presets");
+             
+  MoveAcrossRightBangPresets = controlP5.addBang("Move Right")
+             .setPosition(180, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Right")
+             .moveTo("presets");
+             
+   BPMIndicateTogPresets = controlP5.addToggle("Use BPM").setPosition(20, 750).moveTo("presets");
+   PRightIndicateTogPresets = controlP5.addToggle("Pulse RIGHT").setPosition(100, 750).moveTo("presets");
+   PLeftIndicateTogPresets = controlP5.addToggle("PULSE LEFT").setPosition(180, 750).moveTo("presets");
+}
 
 void AddBangsToGUI()
 {
@@ -134,11 +172,12 @@ void AddBangsToGUI()
    PLeftIndicateTog = controlP5.addToggle("pulseLeft").setPosition(180, 750);
              
    AddBPMControl();
+   AddBPMBasedControlsToPresetList();
 }
 
 void CheckBangs(ControlEvent theEvent) 
 { 
-  if(theEvent.isFrom(PulseToBeatBang))
+  if(theEvent.isFrom(PulseToBeatBang) || theEvent.isFrom(PulseToBeatBangPresets))
   {
      if( (useBPM && pulseLeft) || (useBPM && pulseRight))
      {
@@ -156,7 +195,7 @@ void CheckBangs(ControlEvent theEvent)
      }
      
   }
-  else if(theEvent.isFrom(MoveAcrossLeftBang))
+  else if(theEvent.isFrom(MoveAcrossLeftBang) || theEvent.isFrom(MoveAcrossLeftBangPresets))
   {
     println("Move Left");
     if(pulseLeft)
@@ -173,7 +212,7 @@ void CheckBangs(ControlEvent theEvent)
     }
     curBoxPulse = numberBoxes-1;
   }
-  else if(theEvent.isFrom(MoveAcrossRightBang))
+  else if(theEvent.isFrom(MoveAcrossRightBang) || theEvent.isFrom(MoveAcrossRightBangPresets))
   {
     println("Move Right");
     if(pulseRight)
@@ -467,6 +506,9 @@ void controlEvent(ControlEvent theEvent) {
   }
 
   if (theEvent.isFrom(presetList)) {
+    useBPM = false;
+    pulseRight = false;
+    pulseLeft = false;
     curPreset = (int)theEvent.value();
     applyPreset(curPreset);
   }

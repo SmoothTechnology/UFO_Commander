@@ -90,7 +90,7 @@ String inputString;
 #define GLOBALADDR 0
 
 #define DEBUG_PORT  Serial
-#define LEDINPUTSERIAL Serial1
+#define LEDINPUTSERIAL Serial2
 
 void read() {
 
@@ -252,7 +252,7 @@ void read() {
 //
 
 byte currentCommandBuf [READBUFFERSIZE];
-#define DATA_PIN 6
+#define DATA_PIN 8
 
 void setup() {
 
