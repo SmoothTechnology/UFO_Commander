@@ -22,6 +22,8 @@ int curBPM = 100;
 int curBPMInterval = 0;
 int lastBPMTime = 0;
 int curPreset = 0;
+int curPulsePreset = 0;
+int curCyclePreset = 0;
 public Slider bpmSlider;
 
 
@@ -65,7 +67,7 @@ void TriggerOnBeat()
           }
           
           // Light Here
-          applyPreset(curPreset + curBoxPulse); 
+          applyPreset(curCyclePreset + curBoxPulse); 
         }
         else if(pulseLeft)
         {
@@ -76,11 +78,11 @@ void TriggerOnBeat()
           }
           
           // Light Here
-          applyPreset(curPreset + curBoxPulse); 
+          applyPreset(curCyclePreset + curBoxPulse); 
         }
         else
         {
-          applyPreset(curPreset);  
+          applyPreset(curPulsePreset);  
         }
      } 
   }
@@ -529,6 +531,15 @@ void controlEvent(ControlEvent theEvent) {
     pulseLeft = false;
     curPreset = (int)theEvent.value();
     applyPreset(curPreset);
+  }
+  
+  if (theEvent.isFrom(presetToPulse)){
+     curPulsePreset = (int)theEvent.value(); 
+  }
+  
+  if(theEvent.isFrom(presetToCycle))
+  {
+     curCyclePreset = (int)theEvent.value(); 
   }
 
 }
