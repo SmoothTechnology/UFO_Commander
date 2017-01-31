@@ -285,7 +285,7 @@ final int PADDING = 15;
 ControlP5 controlP5;
 
 String[] patterns = new String[127];
-String[] mappings = new String[6];
+String[] mappings = new String[8];
 
 ListBox presetList;
 Textfield presetNamer;
@@ -346,8 +346,9 @@ void setup() {
   mappings[1] = "forward";
   mappings[2] = "backward";
   mappings[3] = "peak";
-  mappings[4] = "valley";
-  mappings[5] = "dither";
+  mappings[4] = "ShortForward";
+  mappings[5] = "LongForward";
+  mappings[6] = "dekonstruktor";
 
   controlP5 = new ControlP5(this);
 
