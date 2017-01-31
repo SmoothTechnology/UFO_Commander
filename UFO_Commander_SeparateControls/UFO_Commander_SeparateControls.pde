@@ -549,6 +549,10 @@ void controlEvent(ControlEvent theEvent) {
   if(theEvent.isFrom(presetToCycle))
   {
      curCyclePreset = (int)theEvent.value(); 
+     if(curCyclePreset + numberBoxes > presets.size())
+     {
+        curCyclePreset = presets.size() - numberBoxes; 
+     }
   }
 
 }
