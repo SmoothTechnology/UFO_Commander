@@ -10,12 +10,20 @@ import java.util.regex.Pattern;
 final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
+// BPM Control
+int curBoxPulse = 0;
+int numberBoxes = 4;
+boolean pulseRight = false;
+boolean pulseLeft = false;
+
 boolean useBPM = false;
+boolean lastUseBPM = false;
 int curBPM = 100;
 int curBPMInterval = 0;
 int lastBPMTime = 0;
 int curPreset = 0;
 public Slider bpmSlider;
+
 
 void CalculateInterval()
 {
@@ -25,23 +33,203 @@ void CalculateInterval()
 
 void TriggerOnBeat()
 {
-   CalculateInterval();
-   if(millis() - lastBPMTime > curBPMInterval)
-   {
-      lastBPMTime = millis();
-      applyPreset(curPreset);
-   } 
+  BPMIndicateTog.setValue(useBPM);
+  PRightIndicateTog.setValue(pulseRight);
+  PLeftIndicateTog.setValue(pulseLeft);
+  BPMIndicateTogPresets.setValue(useBPM);
+  PRightIndicateTogPresets.setValue(pulseRight);
+  PLeftIndicateTogPresets.setValue(pulseLeft);
+  
+  if(useBPM)
+  {
+     CalculateInterval();
+     
+     if(lastUseBPM != useBPM)
+     {
+       lastBPMTime = millis() - curBPMInterval-1;  
+     }
+     
+     int curMillis = millis();
+     if(curMillis - lastBPMTime > curBPMInterval)
+     {
+        lastBPMTime = curMillis - (curMillis - lastBPMTime - curBPMInterval);
+        //applyPreset(curPreset);
+        
+        // PRESET 34 IS MY PULSE
+        if(pulseRight)
+        {
+          curBoxPulse++;
+          if(curBoxPulse >= numberBoxes)
+          {
+             curBoxPulse = 0; 
+          }
+          
+          // Light Here
+          applyPreset(36 + curBoxPulse); 
+        }
+        else if(pulseLeft)
+        {
+          curBoxPulse--;
+          if(curBoxPulse < 0)
+          {
+            curBoxPulse = numberBoxes-1;
+          }
+          
+          // Light Here
+          applyPreset(36 + curBoxPulse); 
+        }
+        else
+        {
+          applyPreset(34);  
+        }
+     } 
+  }
+  else if(lastUseBPM != useBPM)
+  {
+     applyPreset(curPreset); 
+  }
+  
+  lastUseBPM = useBPM;
 }
 
 void AddBPMControl()
 {
- controlP5.addToggle("useBPM").setPosition(120, 700);
+ //controlP5.addToggle("useBPM").setPosition(120, 700);
  
  bpmSlider = controlP5.addSlider("curBPM")
-             .setPosition(120, 750)
+             .setPosition(260, 700)
              .setRange(0, 300)
              .setSize(220, 20)
              .setLabel("BPM");
+}
+
+// Special Push Buttons
+public Bang PulseToBeatBang;
+public Bang MoveAcrossLeftBang;
+public Bang MoveAcrossRightBang;
+public Bang PulseToBeatBangPresets;
+public Bang MoveAcrossLeftBangPresets;
+public Bang MoveAcrossRightBangPresets;
+
+Toggle BPMIndicateTog;
+Toggle PRightIndicateTog;
+Toggle PLeftIndicateTog;
+Toggle BPMIndicateTogPresets;
+Toggle PRightIndicateTogPresets;
+Toggle PLeftIndicateTogPresets;
+
+
+void AddBPMBasedControlsToPresetList()
+{                   
+   PulseToBeatBangPresets = controlP5.addBang("Beat Pulse")
+             .setPosition(20, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Pulse To Beat")
+             .moveTo("presets");
+            
+  MoveAcrossLeftBangPresets = controlP5.addBang("Move Left")
+             .setPosition(100, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Left")
+             .moveTo("presets");
+             
+  MoveAcrossRightBangPresets = controlP5.addBang("Move Right")
+             .setPosition(180, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Right")
+             .moveTo("presets");
+             
+   BPMIndicateTogPresets = controlP5.addToggle("Use BPM").setPosition(20, 750).moveTo("presets");
+   PRightIndicateTogPresets = controlP5.addToggle("Pulse RIGHT").setPosition(100, 750).moveTo("presets");
+   PLeftIndicateTogPresets = controlP5.addToggle("PULSE LEFT").setPosition(180, 750).moveTo("presets");
+}
+
+void AddBangsToGUI()
+{
+  PulseToBeatBang = controlP5.addBang("doPulseToBeat")
+             .setPosition(20, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Pulse To Beat");
+            
+  MoveAcrossLeftBang = controlP5.addBang("MoveAcrossLeft")
+             .setPosition(100, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Left");
+             
+  MoveAcrossRightBang = controlP5.addBang("MoveAcrossRight")
+             .setPosition(180, 700)
+             .setSize(60, 20)
+             .setTriggerEvent(Bang.RELEASE)
+             .setLabel("Move Right");
+             
+   BPMIndicateTog = controlP5.addToggle("useBPM").setPosition(20, 750);
+   PRightIndicateTog = controlP5.addToggle("pulseRight").setPosition(100, 750);
+   PLeftIndicateTog = controlP5.addToggle("pulseLeft").setPosition(180, 750);
+             
+   AddBPMControl();
+   AddBPMBasedControlsToPresetList();
+}
+
+void CheckBangs(ControlEvent theEvent) 
+{ 
+  if(theEvent.isFrom(PulseToBeatBang) || theEvent.isFrom(PulseToBeatBangPresets))
+  {
+     if( (useBPM && pulseLeft) || (useBPM && pulseRight))
+     {
+       useBPM = true;
+       pulseRight = false;
+       pulseLeft = false;  
+     }
+     else if(useBPM)
+     {
+        useBPM = false; 
+     }
+     else
+     {
+        useBPM = true; 
+     }
+     
+  }
+  else if(theEvent.isFrom(MoveAcrossLeftBang) || theEvent.isFrom(MoveAcrossLeftBangPresets))
+  {
+    println("Move Left");
+    if(pulseLeft)
+    {
+       useBPM = false;
+       pulseLeft = false;
+       pulseRight = false; 
+    }
+    else
+    {
+       useBPM = true;
+       pulseLeft = true;
+       pulseRight = false; 
+    }
+    curBoxPulse = numberBoxes-1;
+  }
+  else if(theEvent.isFrom(MoveAcrossRightBang) || theEvent.isFrom(MoveAcrossRightBangPresets))
+  {
+    println("Move Right");
+    if(pulseRight)
+    {
+       useBPM = false;
+       pulseLeft = false;
+       pulseRight = false; 
+    }
+    else
+    {
+       useBPM = true;
+       pulseLeft = false;
+       pulseRight = true; 
+    }
+    curBoxPulse = 0;
+  }
+  
 }
 
 final String PRESET_FILE = "presets.txt";
@@ -49,7 +237,9 @@ final String PRESET_FILE = "presets.txt";
 //final String RF_SERIAL_PORT = "/dev/tty.usbmodem1411";
 final String RF_SERIAL_PORT = "/dev/tty.sddd";
 //final String SERIAL_PORT = "/dev/tty.usbserial-A703X5EU";
+
 final String SERIAL_PORT = "/dev/cu.usbserial-A703X5EU";
+//final String SERIAL_PORT = "/dev/cu.usbmodem1411";
 
 final int INITIAL_PATTERN = 17;
 
@@ -64,7 +254,7 @@ final int BAUD_RATE = 9600;
 final int MESSAGE_SIZE = 14;
 final int TIMING_ADDR = 129;
 final int OFF_PATTERN = 0;
-final int DELIMETER = 128;
+final int DELIMETER = (int)'z';
 final int INTERVAL = 20;
 
 int lastHeartbeat;
@@ -226,12 +416,14 @@ void setup() {
   synchronizePatterns();
   synchronizeMappings();
 
-  AddBPMControl();
+  AddBangsToGUI();
+  //AddBPMControl();
   CalculateInterval();
 
 }
 
 void draw() {
+ 
  if(DEBUG){
   if(frameCount%2 == 0){
   background(0);
@@ -249,10 +441,7 @@ void draw() {
   // still debugs if port isn't there
   if (!stealth) emptyMessageQueue();
   
-  if(useBPM)
-  {
-    TriggerOnBeat();
-  }
+  TriggerOnBeat();
 }
 
 void sendAllMessages() {
@@ -304,7 +493,9 @@ void keyPressed() {
 }
 
 void controlEvent(ControlEvent theEvent) {
-
+  
+  CheckBangs(theEvent);
+  
   LightGroup l = checkLightControllers(theEvent);
 
   if (keyPressed || l == groupAll) expressSympathy(theEvent);
@@ -315,6 +506,9 @@ void controlEvent(ControlEvent theEvent) {
   }
 
   if (theEvent.isFrom(presetList)) {
+    useBPM = false;
+    pulseRight = false;
+    pulseLeft = false;
     curPreset = (int)theEvent.value();
     applyPreset(curPreset);
   }
@@ -372,7 +566,7 @@ void expressSympathy(ControlEvent theEvent) {
  * Returns Light group controller came from or null if none.
  */
 LightGroup checkLightControllers(ControlEvent theEvent) {
-
+  
   for (Object o : lightGroups) {
 
     LightGroup l = (LightGroup)o;

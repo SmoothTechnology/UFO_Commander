@@ -85,30 +85,25 @@ void SetNewMapping(int value)
 }
 
 String inputString;
-#define MYADDR 1
+#define MYADDR 4
 #define MYSETADDR 6
 #define GLOBALADDR 0
 
-#define LEDINPUTSERIAL Serial1
+#define DEBUG_PORT  Serial
+#define LEDINPUTSERIAL Serial2
 
 void read() {
-  
-  if(Serial.available())
-  {
-    while(Serial.available())
-      Serial.read();
-    r1 = 255;setColors();
-    Serial.println("SET");
-  }
 
   while (LEDINPUTSERIAL.available()) {
+
+    DEBUG_PORT.println(inputString);
 
     char c = (char)LEDINPUTSERIAL.read();
     // Serial.println(c, DEC);
     inputString += c;
-    if (c == 128) {
+    if (c == 'z') {
 
-      Serial.println(inputString);
+      DEBUG_PORT.println(inputString);
 
       if (inputString.charAt(0) == -127) {
 
@@ -257,13 +252,14 @@ void read() {
 //
 
 byte currentCommandBuf [READBUFFERSIZE];
-#define DATA_PIN 6
+#define DATA_PIN 8
 
 void setup() {
 
   pinMode(13, OUTPUT);
   //Serial.begin(115200);
   LEDINPUTSERIAL.begin(9600);
+  DEBUG_PORT.begin(9600);
 
   LEDS.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS).setCorrection( 0x9FFAF0 );;
   LEDS.setBrightness(255);
@@ -364,12 +360,13 @@ void loop() {
     frame = 0;
   }
 
-  if (light)
-    digitalWrite(13, HIGH);
-  else
-    digitalWrite(13, LOW);
+  // Do Not light pin 13
+  //if (light)
+  //  digitalWrite(13, HIGH);
+  //else
+  //  digitalWrite(13, LOW);
 
-  light = !light;
+  //light = !light;
 
 }
 
