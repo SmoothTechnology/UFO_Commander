@@ -1,5 +1,7 @@
 class LightGroup {
 
+  public boolean isFromOSC = false;
+  
   public final int address;
 
   // These are only public so cp5 can manipulate them!
@@ -32,6 +34,13 @@ class LightGroup {
     index = lightGroups.size();
     lightGroups.add(this);
     this.address = address;
+
+    r1 = 0;
+    b1 = 0;
+    g1 = 0;
+    r2 = 0;
+    b2 = 0;
+    g2 = 0;
 
     // Build interface
 
@@ -149,16 +158,31 @@ class LightGroup {
   }
 
   public void setColor1(int r, int g, int b) {
-    r1 = r;
-    g1 = g;
-    b1 = b;
+    print("r: "); print(r); print(" b: "); print(b); print(" g: "); println(g);
+    
+    if(r >= 0)
+      r1 = r;
+     
+    if(g >= 0)
+      g1 = g;
+    
+    if(b >= 0)
+      b1 = b;
+      
     colorPicker1.setColorValue(color(r1, g1, b1));
   }
 
   public void setColor2(int r, int g, int b) {
-    r2 = r;
-    g2 = g;
-    b2 = b;
+    
+    if(r >= 0)
+      r2 = r;
+     
+    if(g >= 0)
+      g2 = g;
+    
+    if(b >= 0)
+      b2 = b;
+
     colorPicker2.setColorValue(color(r2, g2, b2));
   }
 
@@ -185,7 +209,7 @@ class LightGroup {
     color color1 = colorPicker1.getColorValue();
     color color2 = colorPicker2.getColorValue();
     float a;
-
+  
     serialData[0] = (byte)address;
     serialData[1] = (byte)rate;
     serialData[2] = (byte)pattern;
@@ -207,6 +231,15 @@ class LightGroup {
 
     serialData[12] = (byte)brightness;
     serialData[13] = (byte)mapping;
+    
+    for(int i = 0; i < 14; i++)
+    {
+       if(serialData[i] == 122)
+       {
+          serialData[i] = 121; 
+       }
+    }
+    
     serialData[14] = (byte)DELIMETER;
 
     for (int i = 0; i < serialData.length; i++) {

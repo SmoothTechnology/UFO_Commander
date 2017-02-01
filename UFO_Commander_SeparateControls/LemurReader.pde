@@ -24,7 +24,7 @@ class LemurReader implements OscReader {
               
               LightGroup l = (LightGroup)lightGroups.get(j);
               l.setPattern(patternsToIndeces[i]);
-              l.sendMessage();
+              l.isFromOSC = true;
 
             }
           }
@@ -41,8 +41,8 @@ class LemurReader implements OscReader {
             if (activeAddr[j].equals(1.0)) {
               
               LightGroup l = (LightGroup)lightGroups.get(j);
-              l.setMapping(i+1); // hack.
-              l.sendMessage();
+              l.setMapping(i); // hack.
+              l.isFromOSC = true;
 
             }
           }
@@ -70,7 +70,7 @@ class LemurReader implements OscReader {
         for (int j = 0; j < activeAddr.length; j++) {
           if (activeAddr[j].equals(1.0)) {
             LightGroup l = (LightGroup)lightGroups.get(j);
-            l.sendMessage();
+            l.isFromOSC = true;
           }
         }
 
@@ -83,8 +83,9 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor1(v, l.g1, l.b1);
-          l.sendMessage();
+          println("FUCK YOU");
+          l.setColor1(v, -1, -1);
+          l.isFromOSC = true;
 
 
         }
@@ -97,8 +98,8 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor1(l.r1, v, l.b1);
-          l.sendMessage();
+          l.setColor1(-1, v, -1);
+          l.isFromOSC = true;
 
 
         }
@@ -111,8 +112,8 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor1(l.r1, l.g1, v);
-          l.sendMessage();
+          l.setColor1(-1,-1, v);
+          l.isFromOSC = true;
 
 
         }
@@ -125,8 +126,8 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor2(v, l.g2, l.b2);
-          l.sendMessage();
+          l.setColor2(v, -1, -1);
+          l.isFromOSC = true;
 
 
         }
@@ -139,8 +140,8 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor2(l.r2, v, l.b2);
-          l.sendMessage();
+          l.setColor2(-1, v, -1);
+          l.isFromOSC = true;
 
 
         }
@@ -153,8 +154,8 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor2(l.r2, l.g2, v);
-          l.sendMessage();
+          l.setColor2(-1, -1, v);
+          l.isFromOSC = true;
 
 
         }
@@ -165,10 +166,10 @@ class LemurReader implements OscReader {
       for (int i = 0; i < activeAddr.length; i++) {
         if (activeAddr[i].equals(1.0)) {
 
-          int v = (int)(theOscMessage.get(0).floatValue() * 127);
+          int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
           l.setRate(v);
-          l.sendMessage();
+          l.isFromOSC = true;
 
         }
       }
@@ -181,8 +182,7 @@ class LemurReader implements OscReader {
           int v = (int)(theOscMessage.get(0).floatValue() * 127);
           LightGroup l = (LightGroup)lightGroups.get(i);
           l.setBrightness(v);
-          l.sendMessage();
-
+          l.isFromOSC = true;
         }
       }
 
@@ -212,7 +212,7 @@ class LemurReader implements OscReader {
     oscMessage("/GreenSlider2/x", map(green(l.color2), 0, 255, 0, 1));
     oscMessage("/BlueSlider2/x",  map(blue(l.color2), 0, 255, 0, 1));
 
-    oscMessage("/RateSlider/x",   map(l.rate, 0, 127, 0, 1));
+    oscMessage("/RateSlider/x",   map(l.rate, 0, 255, 0, 1));
     oscMessage("/BrightnessSlider/x", map(l.brightness, 0, 127, 0, 1));
 
     // Send pattern message.
@@ -237,7 +237,7 @@ class LemurReader implements OscReader {
 
     // Send mapping message.
 
-    int mappingIndex = l.mapping - 1; // HACK
+    int mappingIndex = l.mapping; // HACK
     message = new OscMessage("/Mappings/x");
     float[] mappingMessage = new float[mappings.length];
     for (int i = 0; i < mappings.length; i++) {

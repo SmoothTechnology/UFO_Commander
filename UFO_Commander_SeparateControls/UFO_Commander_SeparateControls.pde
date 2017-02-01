@@ -246,9 +246,9 @@ final String SERIAL_PORT = "/dev/tty.usbserial-A100S23I";
 
 final int INITIAL_PATTERN = 17;
 
-String IPAD_ADDRESS = "10.0.1.2";
+//String IPAD_ADDRESS = "192.168.3.3";
 
-//String IPAD_ADDRESS = "169.254.23.3";
+String IPAD_ADDRESS = "192.168.1.122";
 
 int IPAD_PORT = 8000;
 int MY_PORT = 12001;
@@ -452,18 +452,18 @@ void setup() {
 }
 
 void draw() {
- 
- if(DEBUG){
-  if(frameCount%2 == 0){
-  background(0);
- }
- else{
- background(40);
- }
- }
- else{
+  IntervalSend();
+// if(DEBUG){
+//  if(frameCount%2 == 0){
+//  background(0);
+// }
+// else{
+// background(40);
+// }
+// }
+// else{
   background(0); 
- }
+// }
   if (port != null) heartbeat();
 
   // checks for the existence of port itself
@@ -823,4 +823,16 @@ void parsePreset(String s) {
   presetList.addItem(data[0], presets.size()-1);
   presetToPulse.addItem(data[0], presets.size()-1);
   presetToCycle.addItem(data[0], presets.size() - 1);
+}
+
+void IntervalSend()
+{
+    for (int i = 0; i < lightGroups.size(); i++) {
+      LightGroup l = (LightGroup)lightGroups.get(i);
+      if(l.isFromOSC)
+      {
+        l.isFromOSC = false;
+        l.sendMessage();
+      }
+    }
 }

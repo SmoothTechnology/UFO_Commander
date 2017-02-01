@@ -2,7 +2,7 @@ interface OscReader {
   void read(OscMessage theOscMessage);
 }
 
-OscReader reader = new LiveReader(); //new LemurReader();
+OscReader reader = new LemurReader();
 
 void oscEvent(OscMessage theOscMessage) {
 
