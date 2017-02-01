@@ -185,7 +185,7 @@ class LightGroup {
     color color1 = colorPicker1.getColorValue();
     color color2 = colorPicker2.getColorValue();
     float a;
-
+  
     serialData[0] = (byte)address;
     serialData[1] = (byte)rate;
     serialData[2] = (byte)pattern;
@@ -207,6 +207,15 @@ class LightGroup {
 
     serialData[12] = (byte)brightness;
     serialData[13] = (byte)mapping;
+    
+    for(int i = 0; i < 14; i++)
+    {
+       if(serialData[i] == 122)
+       {
+          serialData[i] = 121; 
+       }
+    }
+    
     serialData[14] = (byte)DELIMETER;
 
     for (int i = 0; i < serialData.length; i++) {

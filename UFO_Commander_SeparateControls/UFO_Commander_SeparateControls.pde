@@ -246,9 +246,9 @@ final String SERIAL_PORT = "/dev/tty.usbserial-A100S23I";
 
 final int INITIAL_PATTERN = 17;
 
-String IPAD_ADDRESS = "192.168.3.3";
+//String IPAD_ADDRESS = "192.168.3.3";
 
-//String IPAD_ADDRESS = "192.168.1.122";
+String IPAD_ADDRESS = "192.168.1.122";
 
 int IPAD_PORT = 8000;
 int MY_PORT = 12001;
