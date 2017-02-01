@@ -1,5 +1,7 @@
 class LightGroup {
 
+  public boolean isFromOSC = false;
+  
   public final int address;
 
   // These are only public so cp5 can manipulate them!

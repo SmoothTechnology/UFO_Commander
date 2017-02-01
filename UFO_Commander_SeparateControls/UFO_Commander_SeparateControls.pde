@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern; 
 
-final boolean DEBUG = true; // osc
+final boolean DEBUG = false; // osc
 final boolean DEBUG_SERIAL = false;
 
 // BPM Control
@@ -452,7 +452,7 @@ void setup() {
 }
 
 void draw() {
-  
+  IntervalSend();
 // if(DEBUG){
 //  if(frameCount%2 == 0){
 //  background(0);
@@ -823,4 +823,16 @@ void parsePreset(String s) {
   presetList.addItem(data[0], presets.size()-1);
   presetToPulse.addItem(data[0], presets.size()-1);
   presetToCycle.addItem(data[0], presets.size() - 1);
+}
+
+void IntervalSend()
+{
+    for (int i = 0; i < lightGroups.size(); i++) {
+      LightGroup l = (LightGroup)lightGroups.get(i);
+      if(l.isFromOSC)
+      {
+        l.isFromOSC = false;
+        l.sendMessage();
+      }
+    }
 }
