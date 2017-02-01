@@ -38,12 +38,15 @@ void parseBPM(String bpmLine)
 {
   String[] data = split(bpmLine, ",");
 
-  BPMType newBPM = new BPMType();
-  newBPM.name = data[0];
-  newBPM.BPM = Integer.parseInt(data[1]);
+  if(data.length == 2)
+  {
+    BPMType newBPM = new BPMType();
+    newBPM.name = data[0];
+    newBPM.BPM = Integer.parseInt(data[1]);
 
-  bpmList.add(newBPM);
-  BPMGraphicsList.addItem(data[0], bpmList.size()-1);
+    bpmList.add(newBPM);
+    BPMGraphicsList.addItem(data[0], bpmList.size()-1);
+  }
 }
 
 void loadBPMs() {
