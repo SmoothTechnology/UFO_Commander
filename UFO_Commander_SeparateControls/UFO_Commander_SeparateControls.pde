@@ -87,7 +87,7 @@ void setBPMFromOSC(int i)
 {
   if(i > bpmList.size())
     return;
-  
+
   BPMType myBPM = (BPMType)bpmList.get(i);
   curBPM = myBPM.BPM;
   bpmSlider.setValue(curBPM);
@@ -226,8 +226,8 @@ void AddBPMBasedControlsToPresetList()
              .moveTo("presets");
              
    BPMIndicateTogPresets = controlP5.addToggle("Use BPM").setPosition(20, 750).moveTo("presets");
-   PRightIndicateTogPresets = controlP5.addToggle("Pulse RIGHT").setPosition(100, 750).moveTo("presets");
-   PLeftIndicateTogPresets = controlP5.addToggle("PULSE LEFT").setPosition(180, 750).moveTo("presets");
+   PRightIndicateTogPresets = controlP5.addToggle("Pulse RIGHT").setPosition(180, 750).moveTo("presets");
+   PLeftIndicateTogPresets = controlP5.addToggle("PULSE LEFT").setPosition(100, 750).moveTo("presets");
 }
 
 void AddBangsToGUI()
@@ -251,8 +251,8 @@ void AddBangsToGUI()
              .setLabel("Move Right");
              
    BPMIndicateTog = controlP5.addToggle("useBPM").setPosition(20, 750);
-   PRightIndicateTog = controlP5.addToggle("pulseRight").setPosition(100, 750);
-   PLeftIndicateTog = controlP5.addToggle("pulseLeft").setPosition(180, 750);
+   PRightIndicateTog = controlP5.addToggle("pulseRight").setPosition(180, 750);
+   PLeftIndicateTog = controlP5.addToggle("pulseLeft").setPosition(100, 750);
              
    AddBPMControl();
    AddBPMBasedControlsToPresetList();
