@@ -248,7 +248,7 @@ final int INITIAL_PATTERN = 17;
 
 //String IPAD_ADDRESS = "192.168.3.3";
 
-String IPAD_ADDRESS = "192.168.1.122";
+String IPAD_ADDRESS = "192.168.1.87";
 
 int IPAD_PORT = 8000;
 int MY_PORT = 12001;
@@ -527,8 +527,6 @@ void controlEvent(ControlEvent theEvent) {
   
   LightGroup l = checkLightControllers(theEvent);
 
-  if (keyPressed || l == groupAll) expressSympathy(theEvent);
-
   if (theEvent.isFrom(presetNamer)) {
     savePreset(theEvent.getStringValue());
     return;
@@ -553,53 +551,6 @@ void controlEvent(ControlEvent theEvent) {
      {
         curCyclePreset = presets.size() - numberBoxes; 
      }
-  }
-
-}
-
-void expressSympathy(ControlEvent theEvent) {
-
-  if (!sympathizeEvents) {
-    
-    sympathizeEvents = true;
-
-    String name = theEvent.name();
-    name = name.substring(0, name.indexOf("-"));
-
-    for (Object o : lightGroups) {
-
-      LightGroup l = (LightGroup)o;
-      String addr = name + "-" + l.address;
-      Controller c = controlP5.getController(addr);
-      
-      // Controller groups are weird.
-      if (theEvent.isGroup() && theEvent.getGroup() instanceof ColorPicker) {
-        
-        if (name.equals("picker1")) {
-          l.setColor1((int)theEvent.value());
-        } else if (name.equals("picker2")) {
-          l.setColor2((int)theEvent.value());
-        }
-
-      } else if (theEvent.isGroup() && theEvent.getGroup() instanceof RadioButton) {
-
-        if (name.equals("patterns")) {
-          l.setPattern((int)theEvent.value());
-        } else if (name.equals("mappings")) { 
-          l.setMapping((int)theEvent.value());
-        }
-
-      } else if (c != null) {
-
-        c.setValue(theEvent.value());
-
-      }
-
-
-    }
-
-    sympathizeEvents = false;
-
   }
 
 }

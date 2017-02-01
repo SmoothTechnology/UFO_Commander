@@ -41,7 +41,23 @@ class LemurReader implements OscReader {
             if (activeAddr[j].equals(1.0)) {
               
               LightGroup l = (LightGroup)lightGroups.get(j);
-              l.setMapping(i); // hack.
+              if(i == 1)
+              {
+                l.setMapping(5); // hack.
+              }
+              else if(i == 2)
+              {
+                l.setMapping(10);
+              }
+              else if(i == 3)
+              {
+                l.setMapping(14);
+              }
+              else 
+              {
+                l.setMapping(i);
+              }
+
               l.isFromOSC = true;
 
             }
