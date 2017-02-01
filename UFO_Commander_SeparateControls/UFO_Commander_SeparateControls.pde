@@ -85,6 +85,9 @@ void loadBPMs() {
 
 void setBPMFromOSC(int i)
 {
+  if(i > bpmList.size())
+    return;
+  
   BPMType myBPM = (BPMType)bpmList.get(i);
   curBPM = myBPM.BPM;
   bpmSlider.setValue(curBPM);
