@@ -83,7 +83,8 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor1(v, l.g1, l.b1);
+          println("FUCK YOU");
+          l.setColor1(v, -1, -1);
           l.isFromOSC = true;
 
 
@@ -97,7 +98,7 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor1(l.r1, v, l.b1);
+          l.setColor1(-1, v, -1);
           l.isFromOSC = true;
 
 
@@ -111,7 +112,7 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor1(l.r1, l.g1, v);
+          l.setColor1(-1,-1, v);
           l.isFromOSC = true;
 
 
@@ -125,7 +126,7 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor2(v, l.g2, l.b2);
+          l.setColor2(v, -1, -1);
           l.isFromOSC = true;
 
 
@@ -139,7 +140,7 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor2(l.r2, v, l.b2);
+          l.setColor2(-1, v, -1);
           l.isFromOSC = true;
 
 
@@ -153,7 +154,7 @@ class LemurReader implements OscReader {
 
           int v = (int)(theOscMessage.get(0).floatValue() * 255);
           LightGroup l = (LightGroup)lightGroups.get(i);
-          l.setColor2(l.r2, l.g2, v);
+          l.setColor2(-1, -1, v);
           l.isFromOSC = true;
 
 
