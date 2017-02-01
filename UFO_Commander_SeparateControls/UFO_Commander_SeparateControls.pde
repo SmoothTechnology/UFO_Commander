@@ -26,6 +26,57 @@ int curPulsePreset = 0;
 int curCyclePreset = 0;
 public Slider bpmSlider;
 
+class BPMType {
+
+  public int BPM;
+  public String name;
+};
+
+ArrayList bpmList = new ArrayList();
+
+void parseBPM(String bpmLine)
+{
+  String[] data = split(bpmLine, ",");
+
+  BPMType newBPM = new BPMType();
+  newBPM.name = data[0];
+  newBPM.BPM = Integer.parseInt(data[1]);
+
+  bpmList.add(newBPM);
+  BPMGraphicsList.addItem(data[0], bpmList.size()-1);
+}
+
+void loadBPMs() {
+
+
+  BPMGraphicsList = controlP5.addListBox("BPM List")
+                        .setPosition(PADDING+900, PADDING*2 + 70)
+                        .setSize(LIGHT_GROUP_WIDTH, 600)
+                        .setItemHeight(20)
+                        .actAsPulldownMenu(false)
+                        .moveTo("presets");
+
+  bpmList.clear();
+
+  BufferedReader reader = createReader("bpms.txt");
+
+  String line = null;
+
+  do { 
+    
+    try {
+      line = reader.readLine();
+    } catch (IOException e) {
+      e.printStackTrace();
+      line = null;
+    }
+
+    if (line != null) {
+      parseBPM(line);
+    }
+
+  } while (line != null);
+}
 
 void CalculateInterval()
 {
@@ -294,6 +345,8 @@ ListBox presetToPulse;
 ListBox presetToCycle;
 Textfield presetNamer;
 
+ListBox BPMGraphicsList;
+
 Toggle rfPortActiveToggle;
 
 boolean sympathizeEvents = false;
@@ -421,14 +474,14 @@ void setup() {
                         .moveTo("presets");
                      
    presetToPulse = controlP5.addListBox("preset-to-pulse")
-                        .setPosition(PADDING+400, PADDING*2 + 70)
+                        .setPosition(PADDING+300, PADDING*2 + 70)
                         .setSize(LIGHT_GROUP_WIDTH, 600)
                         .setItemHeight(20)
                         .actAsPulldownMenu(false)
                         .moveTo("presets");
                         
   presetToCycle = controlP5.addListBox("preset-to-cycle")
-                        .setPosition(PADDING+800, PADDING*2 + 70)
+                        .setPosition(PADDING+600, PADDING*2 + 70)
                         .setSize(LIGHT_GROUP_WIDTH, 600)
                         .setItemHeight(20)
                         .actAsPulldownMenu(false)
@@ -448,6 +501,8 @@ void setup() {
   AddBangsToGUI();
   //AddBPMControl();
   CalculateInterval();
+
+  loadBPMs();
 
 }
 
@@ -553,6 +608,13 @@ void controlEvent(ControlEvent theEvent) {
      }
   }
 
+  if(theEvent.isFrom(BPMGraphicsList))
+  {
+    BPMType theBPM = (BPMType)bpmList.get((int)theEvent.value());
+    curBPM = theBPM.BPM;
+    bpmSlider.setValue(curBPM);
+  }
+
 }
 
 /**
@@ -641,6 +703,8 @@ void savePreset(String presetName) {
 
 }
 
+
+
 void writePresets() {
 
   PrintWriter output = createWriter(PRESET_FILE);
@@ -691,6 +755,9 @@ void loadPresets() {
   synchronizePresets();
 
 }
+
+
+
 
 void synchronizePresets() {
 
