@@ -79,6 +79,22 @@ void loadBPMs() {
     }
 
   } while (line != null);
+
+  synchronizeBPMs();
+}
+
+void synchronizeBPMs() {
+
+  String[] s = new String[bpmList.size()];
+  for (int i = 0; i < s.length; i++) {
+    BPMType myBPM = (BPMType)bpmList.get(i);
+    s[i] = myBPM.name;
+  }
+
+  OscMessage message = new OscMessage("/BPMs/setLabels");
+  message.add(s);
+  oscP5.send(message, myRemoteLocation);
+
 }
 
 void CalculateInterval()
@@ -498,14 +514,13 @@ void setup() {
            .setPosition(120, 0);
 
   loadPresets();
+    loadBPMs();
   synchronizePatterns();
   synchronizeMappings();
 
   AddBangsToGUI();
   //AddBPMControl();
   CalculateInterval();
-
-  loadBPMs();
 
 }
 
