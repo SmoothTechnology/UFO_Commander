@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern; 
 
-final boolean DEBUG = false; // osc
+final boolean DEBUG = true; // osc
 final boolean DEBUG_SERIAL = false;
 
 // BPM Control
@@ -246,9 +246,9 @@ final String SERIAL_PORT = "/dev/tty.usbserial-A100S23I";
 
 final int INITIAL_PATTERN = 17;
 
-String IPAD_ADDRESS = "10.0.1.2";
+String IPAD_ADDRESS = "192.168.3.3";
 
-//String IPAD_ADDRESS = "169.254.23.3";
+//String IPAD_ADDRESS = "192.168.1.122";
 
 int IPAD_PORT = 8000;
 int MY_PORT = 12001;
@@ -452,18 +452,18 @@ void setup() {
 }
 
 void draw() {
- 
- if(DEBUG){
-  if(frameCount%2 == 0){
-  background(0);
- }
- else{
- background(40);
- }
- }
- else{
+  
+// if(DEBUG){
+//  if(frameCount%2 == 0){
+//  background(0);
+// }
+// else{
+// background(40);
+// }
+// }
+// else{
   background(0); 
- }
+// }
   if (port != null) heartbeat();
 
   // checks for the existence of port itself
