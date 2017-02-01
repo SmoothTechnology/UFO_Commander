@@ -14,7 +14,18 @@ class LemurReader implements OscReader {
         }
       }
 
-    } else if (theOscMessage.addrPattern().equals("/Patterns/x")) {
+    } 
+    else if(theOscMessage.addrPattern().equals("/BPMs/x"))
+    {
+      for (int i = 0; i < theOscMessage.arguments().length; i++) {
+        if (theOscMessage.arguments()[i].equals(1.0)) {
+          setBPMFromOSC(i);
+          sendFeedback();
+
+        }
+      }
+    }
+    else if (theOscMessage.addrPattern().equals("/Patterns/x")) {
       
       for (int i = 0; i < theOscMessage.arguments().length; i++) {
         if (theOscMessage.arguments()[i].equals(1.0)) {
@@ -41,7 +52,23 @@ class LemurReader implements OscReader {
             if (activeAddr[j].equals(1.0)) {
               
               LightGroup l = (LightGroup)lightGroups.get(j);
-              l.setMapping(i); // hack.
+              if(i == 1)
+              {
+                l.setMapping(5); // hack.
+              }
+              else if(i == 2)
+              {
+                l.setMapping(10);
+              }
+              else if(i == 3)
+              {
+                l.setMapping(14);
+              }
+              else 
+              {
+                l.setMapping(i);
+              }
+
               l.isFromOSC = true;
 
             }

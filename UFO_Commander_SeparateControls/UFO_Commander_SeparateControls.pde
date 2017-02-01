@@ -26,6 +26,86 @@ int curPulsePreset = 0;
 int curCyclePreset = 0;
 public Slider bpmSlider;
 
+class BPMType {
+
+  public int BPM;
+  public String name;
+};
+
+ArrayList bpmList = new ArrayList();
+
+void parseBPM(String bpmLine)
+{
+  String[] data = split(bpmLine, ",");
+
+  if(data.length == 2)
+  {
+    BPMType newBPM = new BPMType();
+    newBPM.name = data[0];
+    newBPM.BPM = Integer.parseInt(data[1]);
+
+    bpmList.add(newBPM);
+    BPMGraphicsList.addItem(data[0], bpmList.size()-1);
+  }
+}
+
+void loadBPMs() {
+
+
+  BPMGraphicsList = controlP5.addListBox("BPM List")
+                        .setPosition(PADDING+900, PADDING*2 + 70)
+                        .setSize(LIGHT_GROUP_WIDTH, 600)
+                        .setItemHeight(20)
+                        .actAsPulldownMenu(false)
+                        .moveTo("presets");
+
+  bpmList.clear();
+
+  BufferedReader reader = createReader("bpms.txt");
+
+  String line = null;
+
+  do { 
+    
+    try {
+      line = reader.readLine();
+    } catch (IOException e) {
+      e.printStackTrace();
+      line = null;
+    }
+
+    if (line != null) {
+      parseBPM(line);
+    }
+
+  } while (line != null);
+
+  synchronizeBPMs();
+}
+
+void setBPMFromOSC(int i)
+{
+  if(i > bpmList.size())
+    return;
+
+  BPMType myBPM = (BPMType)bpmList.get(i);
+  curBPM = myBPM.BPM;
+  bpmSlider.setValue(curBPM);
+}
+
+void synchronizeBPMs() {
+
+  String[] s = new String[bpmList.size()];
+  for (int i = 0; i < s.length; i++) {
+    BPMType myBPM = (BPMType)bpmList.get(i);
+    s[i] = myBPM.name;
+  }
+
+  OscMessage message = new OscMessage("/BPMs/setLabels");
+  message.add(s);
+  oscP5.send(message, myRemoteLocation);
+
+}
 
 void CalculateInterval()
 {
@@ -146,8 +226,8 @@ void AddBPMBasedControlsToPresetList()
              .moveTo("presets");
              
    BPMIndicateTogPresets = controlP5.addToggle("Use BPM").setPosition(20, 750).moveTo("presets");
-   PRightIndicateTogPresets = controlP5.addToggle("Pulse RIGHT").setPosition(100, 750).moveTo("presets");
-   PLeftIndicateTogPresets = controlP5.addToggle("PULSE LEFT").setPosition(180, 750).moveTo("presets");
+   PRightIndicateTogPresets = controlP5.addToggle("Pulse RIGHT").setPosition(180, 750).moveTo("presets");
+   PLeftIndicateTogPresets = controlP5.addToggle("PULSE LEFT").setPosition(100, 750).moveTo("presets");
 }
 
 void AddBangsToGUI()
@@ -171,8 +251,8 @@ void AddBangsToGUI()
              .setLabel("Move Right");
              
    BPMIndicateTog = controlP5.addToggle("useBPM").setPosition(20, 750);
-   PRightIndicateTog = controlP5.addToggle("pulseRight").setPosition(100, 750);
-   PLeftIndicateTog = controlP5.addToggle("pulseLeft").setPosition(180, 750);
+   PRightIndicateTog = controlP5.addToggle("pulseRight").setPosition(180, 750);
+   PLeftIndicateTog = controlP5.addToggle("pulseLeft").setPosition(100, 750);
              
    AddBPMControl();
    AddBPMBasedControlsToPresetList();
@@ -248,7 +328,7 @@ final int INITIAL_PATTERN = 17;
 
 //String IPAD_ADDRESS = "192.168.3.3";
 
-String IPAD_ADDRESS = "192.168.1.122";
+String IPAD_ADDRESS = "192.168.1.87";
 
 int IPAD_PORT = 8000;
 int MY_PORT = 12001;
@@ -293,6 +373,8 @@ ListBox presetList;
 ListBox presetToPulse;
 ListBox presetToCycle;
 Textfield presetNamer;
+
+ListBox BPMGraphicsList;
 
 Toggle rfPortActiveToggle;
 
@@ -421,14 +503,14 @@ void setup() {
                         .moveTo("presets");
                      
    presetToPulse = controlP5.addListBox("preset-to-pulse")
-                        .setPosition(PADDING+400, PADDING*2 + 70)
+                        .setPosition(PADDING+300, PADDING*2 + 70)
                         .setSize(LIGHT_GROUP_WIDTH, 600)
                         .setItemHeight(20)
                         .actAsPulldownMenu(false)
                         .moveTo("presets");
                         
   presetToCycle = controlP5.addListBox("preset-to-cycle")
-                        .setPosition(PADDING+800, PADDING*2 + 70)
+                        .setPosition(PADDING+600, PADDING*2 + 70)
                         .setSize(LIGHT_GROUP_WIDTH, 600)
                         .setItemHeight(20)
                         .actAsPulldownMenu(false)
@@ -442,6 +524,7 @@ void setup() {
            .setPosition(120, 0);
 
   loadPresets();
+    loadBPMs();
   synchronizePatterns();
   synchronizeMappings();
 
@@ -527,8 +610,6 @@ void controlEvent(ControlEvent theEvent) {
   
   LightGroup l = checkLightControllers(theEvent);
 
-  if (keyPressed || l == groupAll) expressSympathy(theEvent);
-
   if (theEvent.isFrom(presetNamer)) {
     savePreset(theEvent.getStringValue());
     return;
@@ -555,51 +636,11 @@ void controlEvent(ControlEvent theEvent) {
      }
   }
 
-}
-
-void expressSympathy(ControlEvent theEvent) {
-
-  if (!sympathizeEvents) {
-    
-    sympathizeEvents = true;
-
-    String name = theEvent.name();
-    name = name.substring(0, name.indexOf("-"));
-
-    for (Object o : lightGroups) {
-
-      LightGroup l = (LightGroup)o;
-      String addr = name + "-" + l.address;
-      Controller c = controlP5.getController(addr);
-      
-      // Controller groups are weird.
-      if (theEvent.isGroup() && theEvent.getGroup() instanceof ColorPicker) {
-        
-        if (name.equals("picker1")) {
-          l.setColor1((int)theEvent.value());
-        } else if (name.equals("picker2")) {
-          l.setColor2((int)theEvent.value());
-        }
-
-      } else if (theEvent.isGroup() && theEvent.getGroup() instanceof RadioButton) {
-
-        if (name.equals("patterns")) {
-          l.setPattern((int)theEvent.value());
-        } else if (name.equals("mappings")) { 
-          l.setMapping((int)theEvent.value());
-        }
-
-      } else if (c != null) {
-
-        c.setValue(theEvent.value());
-
-      }
-
-
-    }
-
-    sympathizeEvents = false;
-
+  if(theEvent.isFrom(BPMGraphicsList))
+  {
+    BPMType theBPM = (BPMType)bpmList.get((int)theEvent.value());
+    curBPM = theBPM.BPM;
+    bpmSlider.setValue(curBPM);
   }
 
 }
@@ -690,6 +731,8 @@ void savePreset(String presetName) {
 
 }
 
+
+
 void writePresets() {
 
   PrintWriter output = createWriter(PRESET_FILE);
@@ -740,6 +783,9 @@ void loadPresets() {
   synchronizePresets();
 
 }
+
+
+
 
 void synchronizePresets() {
 
