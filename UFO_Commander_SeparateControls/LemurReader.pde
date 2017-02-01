@@ -14,7 +14,18 @@ class LemurReader implements OscReader {
         }
       }
 
-    } else if (theOscMessage.addrPattern().equals("/Patterns/x")) {
+    } 
+    else if(theOscMessage.addrPattern().equals("/BPMs/x"))
+    {
+      for (int i = 0; i < theOscMessage.arguments().length; i++) {
+        if (theOscMessage.arguments()[i].equals(1.0)) {
+          setBPMFromOSC(i);
+          sendFeedback();
+
+        }
+      }
+    }
+    else if (theOscMessage.addrPattern().equals("/Patterns/x")) {
       
       for (int i = 0; i < theOscMessage.arguments().length; i++) {
         if (theOscMessage.arguments()[i].equals(1.0)) {

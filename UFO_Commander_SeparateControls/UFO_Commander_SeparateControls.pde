@@ -83,6 +83,13 @@ void loadBPMs() {
   synchronizeBPMs();
 }
 
+void setBPMFromOSC(int i)
+{
+  BPMType myBPM = (BPMType)bpmList.get(i);
+  curBPM = myBPM.BPM;
+  bpmSlider.setValue(curBPM);
+}
+
 void synchronizeBPMs() {
 
   String[] s = new String[bpmList.size()];
