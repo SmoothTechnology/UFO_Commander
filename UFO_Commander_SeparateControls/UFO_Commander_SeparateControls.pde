@@ -612,7 +612,7 @@ void controlEvent(ControlEvent theEvent) {
 
   LightGroup l = checkLightControllers(theEvent);
 
-  if (keyPressed || l == groupAll) expressSympathy(theEvent);
+  //if (keyPressed || l == groupAll) expressSympathy(theEvent);
 
   if (theEvent.isFrom(presetNamer)) {
     savePreset(theEvent.getStringValue());
