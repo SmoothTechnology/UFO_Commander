@@ -4,6 +4,11 @@ class LemurReader implements OscReader {
   void read(OscMessage theOscMessage) {
 
     if (theOscMessage.addrPattern().equals("/Presets/x")) {
+
+      useBPM = false;
+      pulseLeft = false;
+      pulseRight = false; 
+      lastUseBPM = useBPM;
       
       for (int i = 0; i < theOscMessage.arguments().length; i++) {
         if (theOscMessage.arguments()[i].equals(1.0)) {
@@ -13,7 +18,6 @@ class LemurReader implements OscReader {
 
         }
       }
-
     } 
     else if(theOscMessage.addrPattern().equals("/BPMs/x"))
     {
@@ -36,12 +40,11 @@ class LemurReader implements OscReader {
               LightGroup l = (LightGroup)lightGroups.get(j);
               l.setPattern(patternsToIndeces[i]);
               l.isFromOSC = true;
-
             }
           }
 
         }
-      }
+      } 
 
     } else if (theOscMessage.addrPattern().equals("/Mappings/x")) {
       
